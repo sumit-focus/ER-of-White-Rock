@@ -1,64 +1,73 @@
 {
     "settings": {
         "siteName": "ER of White Rock",
-        "contactPhone": "(555) 123-4567",
-        "address": "White Rock, TX",
-        "email": "info@erofwhiterock.com"
+        "contactPhone": "555-0123-4567",
+        "address": "123 Medical Plaza Dr, Suite 100, New York, NY 10001",
+        "email": "info@erwhiterock.com"
     },
     "hero": {
-        "title": "NO WAIT. EXPERT CARE.",
-        "subtitle": "Your Neighborhood, Full-Service Emergency Room in White Rock. Open 24/7/365.",
-        "ctaText": "Call Now",
-        "ctaLink": "tel:5551234567",
-        "backgroundImage": "/images/hero.png"
+        "title": "Expert Medical Care, Without the Wait.",
+        "subtitle": "Immediate board-certified attention for adults and children. Skip the crowded ER and get treated with dignity and speed at ER of White Rock.",
+        "ctaText": "Get Directions",
+        "ctaLink": "#",
+        "backgroundImage": "https://lh3.googleusercontent.com/aida-public/AB6AXuDi2UHcAwK6rz2n2XdTT7SPMGviU9lxixSb9sNZ_nvYqZXe6682pQALslkOGS562Nnvl4faK8TKP9ec3kA7FRih84S2fHdY-ewKSOtczHyQst8dyzkEZS0iIqt3A6nz1MkICgjEQFH9jNXc5DpO6F3jRqVqMKr7ymlB3vzFsibcqQ-Vm8Pl8la0klYS3rKYLMQl2uXHEStEziduUak37JVqxedvsgCzzpFbc0f_KGZ8ZMW1Aq0-L2RXNl3wv-gyKcHOIl3iU5dERvba"
     },
     "services": [
         {
-            "title": "Chest Pain & Stroke",
-            "description": "Immediate care for heart attack symptoms and cardiac distress with advanced testing.",
-            "icon": "♥"
+            "id": "service-emergency",
+            "title": "Emergency Medicine",
+            "description": "Comprehensive care for life-threatening conditions. Our ER is equipped for critical situations 24/7/365.",
+            "icon": "ambulance"
         },
         {
-            "title": "Imaging & Lab",
-            "description": "Full imaging capabilities on-site including CT and X-Ray.",
-            "icon": "🔬"
-        },
-        {
-            "title": "Trauma & Fractures",
-            "description": "Rapid treatment for broken bones, dislocations, and fractures.",
-            "icon": "🦴"
-        },
-        {
+            "id": "service-pediatric",
             "title": "Pediatric Care",
-            "description": "Specialized urgent care for infants and children.",
-            "icon": "👶"
+            "description": "Specialized, gentle emergency treatment for infants, children, and teens in a comforting environment.",
+            "icon": "child_care"
         },
         {
-            "title": "Head Injuries",
-            "description": "Treatment for severe concussions and head trauma.",
-            "icon": "🧠"
+            "id": "service-trauma",
+            "title": "Trauma & Injury",
+            "description": "Advanced treatment for fractures, deep cuts, burns, and other acute physical injuries requiring immediate attention.",
+            "icon": "personal_injury"
+        },
+        {
+            "id": "service-diagnostics",
+            "title": "Diagnostic Imaging",
+            "description": "State-of-the-art on-site CT scans, digital X-rays, and ultrasounds for rapid and accurate diagnosis.",
+            "icon": "radiology"
         }
     ],
     "features": [
         {
-            "title": "24/7",
-            "label": "Accessibility",
-            "desc": "Open 24 hours a day, 7 days a week, 365 days a year."
+            "title": "No Wait Times",
+            "desc": "Experience immediate triage and bedside care. We prioritize getting you seen by a doctor the moment you arrive.",
+            "icon": "timer_off"
         },
         {
-            "title": "MD",
-            "label": "Board-Certified",
-            "desc": "Experienced ER physicians always on site."
+            "title": "Board-Certified Care",
+            "desc": "Our facility is staffed exclusively by ER-trained physicians and nurses who are experts in emergency medicine and trauma care.",
+            "icon": "medical_information"
         },
         {
-            "title": "$",
-            "label": "Transparent",
-            "desc": "Most insurance accepted, affordable self-pay options."
-        },
-        {
-            "title": "♥",
-            "label": "Community",
-            "desc": "Dedicated to serving the White Rock community."
+            "title": "Advanced Technology",
+            "desc": "Equipped with on-site CT scans, digital X-rays, ultrasounds, and a full-service laboratory for rapid and accurate diagnosis.",
+            "icon": "biotech"
         }
-    ]
+    ],
+    "comparison": {
+        "title": "ER of White Rock vs. Urgent Care",
+        "subtitle": "Understanding when to choose a freestanding emergency room can save your life.",
+        "erFeatures": [
+            "Open 24/7/365",
+            "Board-Certified ER Physicians",
+            "Advanced Imaging & Lab",
+            "Life-Threatening Care"
+        ],
+        "urgentCareFeatures": [
+            "Limited Hours",
+            "Mid-Level Providers",
+            "Basic Capabilities"
+        ]
+    }
 }
