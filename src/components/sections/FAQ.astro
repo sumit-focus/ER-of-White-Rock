@@ -1,0 +1,65 @@
+---
+const { data } = Astro.props;
+
+if (!data) return null;
+
+const { sectionTitle, sectionSubtitle, faqs } = data;
+
+// Default FAQs if not provided
+const defaultFaqs = [
+    {
+        question: "How does billing work?",
+        answer: "We bill your insurance directly. Co-pays are collected at the time of service. We offer transparent pricing for self-pay patients and will always provide an estimate before treatment.",
+    },
+    {
+        question: "Do I need an appointment?",
+        answer: "No appointments are necessary. We are a walk-in emergency care facility open 24/7.",
+    },
+    {
+        question: "What insurance is accepted?",
+        answer: "We accept most major insurance plans. Please refer to our Insurance Plans section above for a comprehensive list or contact us directly.",
+    },
+];
+
+const displayFaqs = faqs || defaultFaqs;
+---
+
+<section class="py-24 bg-background-subtle">
+    <div class="max-w-3xl mx-auto px-6 lg:px-12">
+        <!-- Section Header -->
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-text-main mb-4">
+                {sectionTitle || "Patient Questions"}
+            </h2>
+            <p class="text-text-muted">
+                {
+                    sectionSubtitle ||
+                        "Common inquiries about our emergency care services."
+                }
+            </p>
+        </div>
+
+        <!-- FAQ Accordion -->
+        <div class="flex flex-col gap-4">
+            {
+                displayFaqs.map((faq: any) => (
+                    <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                        <details class="group p-6 bg-white cursor-pointer">
+                            <summary class="flex justify-between items-center font-bold text-lg list-none text-text-main">
+                                <span>{faq.question}</span>
+                                <span class="transition-transform duration-300 group-open:rotate-180 flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-primary shrink-0 ml-4">
+                                    <span class="material-symbols-outlined">
+                                        expand_more
+                                    </span>
+                                </span>
+                            </summary>
+                            <div class="text-text-muted mt-4 leading-relaxed animate-fadeIn">
+                                {faq.answer}
+                            </div>
+                        </details>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>

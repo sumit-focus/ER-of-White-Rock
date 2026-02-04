@@ -1,0 +1,87 @@
+---
+import { urlFor } from "../../lib/sanity";
+
+const { data } = Astro.props;
+
+if (!data) return null;
+
+const { sectionTitle, sectionSubtitle, physicians } = data;
+
+// Default physicians if not provided
+const defaultPhysicians = [
+    {
+        name: "Dr. Sarah Bennett",
+        role: "Medical Director",
+        bio: "Board-Certified in Emergency Medicine with over 15 years of experience leading trauma teams in high-volume hospitals.",
+        specialties: ["Trauma", "Critical Care"],
+    },
+    {
+        name: "Dr. Michael Ross",
+        role: "Lead Physician",
+        bio: "Specializes in pediatric emergency care and acute cardiac intervention. Committed to patient-centered treatment.",
+        specialties: ["Pediatrics", "Cardiology"],
+    },
+    {
+        name: "Dr. Emily Chen",
+        role: "ER Physician",
+        bio: "Expert in rapid diagnostics and trauma stabilization with a strong focus on compassionate care for families.",
+        specialties: ["Diagnostics", "Family Medicine"],
+    },
+];
+
+const displayPhysicians = physicians || defaultPhysicians;
+---
+
+<section id="physicians" class="py-24 bg-white">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-12">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <span class="text-accent font-bold tracking-widest uppercase text-sm">Medical Excellence</span>
+            <h2 class="text-4xl font-bold mt-2 text-text-main">{sectionTitle || "Meet Our Experts"}</h2>
+            <p class="text-text-muted mt-4 max-w-2xl mx-auto">
+                {sectionSubtitle || "Our team is led by board-certified emergency physicians committed to providing the highest standard of care."}
+            </p>
+        </div>
+        
+        <!-- Physicians Grid -->
+        <div class="grid md:grid-cols-3 gap-8">
+            {displayPhysicians.map((physician: any) => (
+                <div class="group bg-white rounded-3xl overflow-hidden shadow-[0_4px_20px_-2px_#0000000d] hover:shadow-[0_10px_40px_-10px_#00000014] transition-all border border-gray-100">
+                    <!-- Image -->
+                    <div class="h-80 overflow-hidden relative bg-gradient-to-br from-primary/20 to-secondary/20">
+                        {physician.image ? (
+                            <img
+                                src={urlFor(physician.image).width(400).height(400).url()}
+                                alt={physician.name}
+                                class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                            />
+                        ) : (
+                            <div class="w-full h-full flex items-center justify-center">
+                                <span class="material-symbols-outlined text-8xl text-primary/30">person</span>
+                            </div>
+                        )}
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-6 text-white">
+                            <p class="text-xs font-bold uppercase tracking-widest text-accent mb-1">{physician.role}</p>
+                            <h3 class="text-xl font-bold">{physician.name}</h3>
+                        </div>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="p-8">
+                        <p class="text-text-muted text-sm leading-relaxed">{physician.bio}</p>
+                        {physician.specialties && physician.specialties.length > 0 && (
+                            <div class="mt-4 flex gap-2 flex-wrap">
+                                {physician.specialties.map((specialty: string) => (
+                                    <span class="bg-gray-100 px-3 py-1 rounded-full text-xs font-bold text-text-main">
+                                        {specialty}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>

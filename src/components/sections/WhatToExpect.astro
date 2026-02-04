@@ -1,0 +1,47 @@
+---
+const { data } = Astro.props;
+
+if (!data) return null;
+
+const { sectionTitle, sectionSubtitle, steps } = data;
+
+// Default steps if not provided
+const defaultSteps = [
+    { number: 1, title: "Immediate Triage", description: "No waiting room time. You are taken directly to a private room for assessment." },
+    { number: 2, title: "Expert Consultation", description: "Rapid assessment by a board-certified physician to understand your needs." },
+    { number: 3, title: "Diagnostic Testing", description: "Fast results from our on-site lab and advanced imaging technology." },
+    { number: 4, title: "Care & Discharge", description: "Compassionate treatment with a clear follow-up plan or seamless transfer." },
+];
+
+const displaySteps = steps || defaultSteps;
+---
+
+<section class="py-24 bg-gray-50">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-12">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <span class="text-accent font-bold tracking-widest uppercase text-sm">Your Journey</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-text-main mt-2 mb-4">{sectionTitle || "What to Expect"}</h2>
+            <p class="text-text-muted text-lg max-w-2xl mx-auto">
+                {sectionSubtitle || "We've streamlined our process to ensure you receive the care you need as quickly and comfortably as possible."}
+            </p>
+        </div>
+        
+        <!-- Timeline Steps -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+            <!-- Connecting Line (Desktop Only) -->
+            <div class="hidden md:block absolute top-8 left-0 w-full h-0.5 bg-gray-200 -z-10 translate-y-4"></div>
+            
+            {displaySteps.map((step: any, index: number) => (
+                <div class="flex flex-col items-center text-center">
+                    <!-- Step Number -->
+                    <div class="w-16 h-16 rounded-full bg-white border-4 border-primary text-primary flex items-center justify-center font-bold text-xl mb-6 shadow-sm z-10">
+                        {step.number || index + 1}
+                    </div>
+                    <h3 class="text-xl font-bold text-text-main mb-2">{step.title}</h3>
+                    <p class="text-text-muted text-sm">{step.description}</p>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>

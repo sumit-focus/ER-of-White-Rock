@@ -1,0 +1,163 @@
+---
+const { data } = Astro.props;
+
+if (!data) return null;
+
+const { sectionTitle, sectionSubtitle, urgentCareFeatures, erFeatures } = data;
+
+// Default features if not provided
+const defaultUrgentCare = [
+    {
+        icon: "schedule",
+        title: "Limited Hours",
+        description: "Usually closes by 8 PM or 9 PM. Not available overnight.",
+    },
+    {
+        icon: "person",
+        title: "Mid-Level Providers",
+        description:
+            "Care often provided by Nurse Practitioners or PAs, rarely physicians.",
+    },
+    {
+        icon: "medical_services",
+        title: "Basic Capabilities",
+        description:
+            "Limited to minor illnesses, simple X-rays, and basic stitching.",
+    },
+    {
+        icon: "block",
+        title: "No Advanced Imaging",
+        description:
+            "Typically no CT scans, Ultrasounds, or comprehensive labs on-site.",
+    },
+    {
+        icon: "ambulance",
+        title: "Not for Emergencies",
+        description:
+            "Cannot treat heart attacks, strokes, or severe trauma. Will call 911.",
+    },
+];
+
+const defaultER = [
+    {
+        icon: "history_toggle_off",
+        title: "Open 24/7/365",
+        description:
+            "Always open, including nights, weekends, and all holidays.",
+    },
+    {
+        icon: "badge",
+        title: "Board-Certified ER Physicians",
+        description:
+            "Expert doctors on-site at all times to treat any medical condition.",
+    },
+    {
+        icon: "radiology",
+        title: "Full Advanced Imaging",
+        description:
+            "Immediate access to CT Scans, Ultrasounds, and Digital X-rays.",
+    },
+    {
+        icon: "biotech",
+        title: "COLA-Certified Laboratory",
+        description:
+            "Complete blood work and cardiac enzyme testing with results in minutes.",
+    },
+    {
+        icon: "ecg_heart",
+        title: "Life-Saving Care",
+        description:
+            "Fully equipped for heart attacks, strokes, respiratory distress, and trauma.",
+    },
+];
+
+const displayUrgentCare = urgentCareFeatures || defaultUrgentCare;
+const displayER = erFeatures || defaultER;
+---
+
+<section class="py-24 bg-white border-t border-gray-100">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-12">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <span
+                class="text-accent font-bold tracking-widest uppercase text-sm"
+                >Know Where to Go</span
+            >
+            <h2 class="text-4xl font-bold mt-2 text-text-main">
+                {sectionTitle || "ER of White Rock vs. Urgent Care"}
+            </h2>
+            <p class="text-text-muted text-lg mt-4 max-w-2xl mx-auto">
+                {
+                    sectionSubtitle ||
+                        "Understanding when to choose a freestanding emergency room can save your life."
+                }
+            </p>
+        </div>
+
+        <!-- Comparison Cards -->
+        <div class="grid md:grid-cols-2 gap-8 items-stretch">
+            <!-- Urgent Care Card -->
+            <div
+                class="p-8 lg:p-12 rounded-3xl bg-gray-50 border border-gray-100 opacity-80"
+            >
+                <h3 class="text-2xl font-bold text-text-muted mb-6">
+                    Standard Urgent Care
+                </h3>
+                <ul class="space-y-6">
+                    {
+                        displayUrgentCare.map((feature: any) => (
+                            <li class="flex items-start gap-4">
+                                <span class="material-symbols-outlined text-gray-400 shrink-0">
+                                    {feature.icon}
+                                </span>
+                                <div>
+                                    <strong class="block text-text-main">
+                                        {feature.title}
+                                    </strong>
+                                    <span class="text-sm text-text-muted">
+                                        {feature.description}
+                                    </span>
+                                </div>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+
+            <!-- ER Card (Highlighted) -->
+            <div
+                class="p-8 lg:p-12 rounded-3xl bg-white border-2 border-primary shadow-xl relative overflow-hidden"
+            >
+                <!-- Badge -->
+                <div
+                    class="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-4 py-1 rounded-bl-xl uppercase tracking-wider"
+                >
+                    Best for Emergencies
+                </div>
+
+                <h3 class="text-2xl font-bold text-primary mb-6">
+                    ER of White Rock
+                </h3>
+                <ul class="space-y-6">
+                    {
+                        displayER.map((feature: any) => (
+                            <li class="flex items-start gap-4">
+                                <span class="material-symbols-outlined text-accent shrink-0">
+                                    {feature.icon}
+                                </span>
+                                <div>
+                                    <strong class="block text-text-main">
+                                        {feature.title}
+                                    </strong>
+                                    <span class="text-sm text-text-muted">
+                                        {feature.description}
+                                    </span>
+                                </div>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>

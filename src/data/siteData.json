@@ -1,0 +1,64 @@
+{
+    "settings": {
+        "siteName": "ER of White Rock",
+        "contactPhone": "(555) 123-4567",
+        "address": "White Rock, TX",
+        "email": "info@erofwhiterock.com"
+    },
+    "hero": {
+        "title": "NO WAIT. EXPERT CARE.",
+        "subtitle": "Your Neighborhood, Full-Service Emergency Room in White Rock. Open 24/7/365.",
+        "ctaText": "Call Now",
+        "ctaLink": "tel:5551234567",
+        "backgroundImage": "/images/hero.png"
+    },
+    "services": [
+        {
+            "title": "Chest Pain & Stroke",
+            "description": "Immediate care for heart attack symptoms and cardiac distress with advanced testing.",
+            "icon": "♥"
+        },
+        {
+            "title": "Imaging & Lab",
+            "description": "Full imaging capabilities on-site including CT and X-Ray.",
+            "icon": "🔬"
+        },
+        {
+            "title": "Trauma & Fractures",
+            "description": "Rapid treatment for broken bones, dislocations, and fractures.",
+            "icon": "🦴"
+        },
+        {
+            "title": "Pediatric Care",
+            "description": "Specialized urgent care for infants and children.",
+            "icon": "👶"
+        },
+        {
+            "title": "Head Injuries",
+            "description": "Treatment for severe concussions and head trauma.",
+            "icon": "🧠"
+        }
+    ],
+    "features": [
+        {
+            "title": "24/7",
+            "label": "Accessibility",
+            "desc": "Open 24 hours a day, 7 days a week, 365 days a year."
+        },
+        {
+            "title": "MD",
+            "label": "Board-Certified",
+            "desc": "Experienced ER physicians always on site."
+        },
+        {
+            "title": "$",
+            "label": "Transparent",
+            "desc": "Most insurance accepted, affordable self-pay options."
+        },
+        {
+            "title": "♥",
+            "label": "Community",
+            "desc": "Dedicated to serving the White Rock community."
+        }
+    ]
+}

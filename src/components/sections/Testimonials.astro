@@ -1,0 +1,75 @@
+---
+const { data } = Astro.props;
+
+if (!data) return null;
+
+const { testimonials } = data;
+
+// Default testimonial if not provided
+const defaultTestimonial = {
+    quote: "I was seen immediately. The staff was incredibly professional and caring during a stressful time. Cleanest facility I've ever been to.",
+    author: "Jane Doe",
+    role: "Verified Patient",
+    rating: 5,
+};
+
+const displayTestimonial = testimonials?.[0] || defaultTestimonial;
+---
+
+<section class="py-24 bg-background-subtle">
+    <div class="max-w-[1000px] mx-auto px-6 text-center">
+        <!-- Quote Icon -->
+        <span class="material-symbols-outlined text-accent text-6xl mb-6"
+            >format_quote</span
+        >
+
+        <!-- Quote Text -->
+        <h2
+            class="text-3xl md:text-4xl font-bold text-text-main mb-8 leading-tight"
+        >
+            "{displayTestimonial.quote}"
+        </h2>
+
+        <!-- Author Info -->
+        <div class="flex flex-col items-center justify-center gap-4">
+            <!-- Star Rating -->
+            <div class="flex text-yellow-400 gap-1 text-2xl">
+                {
+                    Array.from({ length: displayTestimonial.rating || 5 }).map(
+                        () => (
+                            <span
+                                class="material-symbols-outlined"
+                                style="font-variation-settings: 'FILL' 1;"
+                            >
+                                star
+                            </span>
+                        ),
+                    )
+                }
+            </div>
+
+            <!-- Author -->
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg"
+                >
+                    {
+                        displayTestimonial.author
+                            ?.split(" ")
+                            .map((n: string) => n[0])
+                            .join("")
+                            .slice(0, 2) || "JD"
+                    }
+                </div>
+                <div class="text-left">
+                    <p class="font-bold text-text-main">
+                        {displayTestimonial.author}
+                    </p>
+                    <p class="text-sm text-text-muted">
+                        {displayTestimonial.role || "Patient"}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

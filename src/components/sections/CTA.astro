@@ -1,0 +1,64 @@
+---
+const { data } = Astro.props;
+
+if (!data) return null;
+
+const { title, text, buttonText, buttonLink } = data;
+---
+
+<section class="py-24 bg-primary text-white text-center" id="contact">
+    <div class="container mx-auto px-4 max-w-4xl">
+        <h2 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+            {title}
+        </h2>
+        <p
+            class="text-xl md:text-2xl text-blue-100 mb-10 font-medium leading-relaxed"
+        >
+            {text}
+        </p>
+
+        <div
+            class="flex flex-col md:flex-row gap-4 justify-center items-center mb-16"
+        >
+            {
+                buttonLink && buttonText && (
+                    <a
+                        href={buttonLink}
+                        class="bg-white text-primary border-2 border-transparent px-8 py-3 rounded-lg font-bold uppercase tracking-wider hover:bg-gray-50 transition-all duration-300 shadow-sm hover:shadow-md text-sm cursor-pointer"
+                    >
+                        {buttonText}
+                    </a>
+                )
+            }
+            <a
+                href="https://maps.google.com"
+                class="border-2 border-white/30 text-white px-8 py-3 rounded-lg font-bold uppercase tracking-wider hover:bg-white/10 transition-all duration-300 text-sm"
+            >
+                Get Directions
+            </a>
+        </div>
+
+        <div
+            class="grid md:grid-cols-3 gap-8 text-center border-t border-white/10 pt-10"
+        >
+            <div>
+                <h3 class="text-lg font-bold mb-2">Location</h3>
+                <p class="text-blue-200">
+                    White Rock Lake<br />Dallas, TX 75218
+                </p>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold mb-2">Hours</h3>
+                <p class="text-blue-200">
+                    Open 24/7<br />365 Days a Year
+                </p>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold mb-2">Contact</h3>
+                <p class="text-blue-200">
+                    (555) 123-4567<br />info@erwhiterock.com
+                </p>
+            </div>
+        </div>
+    </div>
+</section>

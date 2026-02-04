@@ -1,0 +1,64 @@
+---
+const { data } = Astro.props;
+
+// Default features if not provided
+const defaultFeatures = [
+    {
+        icon: "timer_off",
+        title: "Immediate Care",
+        description:
+            "Experience immediate triage and bedside care. We prioritize getting you seen by a doctor the moment you arrive with our streamlined process.",
+    },
+    {
+        icon: "medical_information",
+        title: "Board-Certified Care",
+        description:
+            "Our facility is staffed exclusively by ER-trained physicians and nurses who are experts in emergency medicine and trauma care.",
+    },
+    {
+        icon: "biotech",
+        title: "Advanced Technology",
+        description:
+            "Equipped with on-site CT scans, digital X-rays, ultrasounds, and a full-service laboratory for rapid and accurate diagnosis.",
+    },
+];
+
+const features = data?.features || defaultFeatures;
+const sectionTitle = data?.sectionTitle || "Why Choose ER of White Rock?";
+const sectionSubtitle =
+    data?.sectionSubtitle ||
+    "We redefine emergency care by putting the patient first, combining speed, expertise, and advanced technology.";
+---
+
+<section class="py-24 bg-white">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-12">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-text-main mb-6">
+                {sectionTitle}
+            </h2>
+            <p class="text-text-muted text-lg max-w-2xl mx-auto">
+                {sectionSubtitle}
+            </p>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="grid md:grid-cols-3 gap-8">
+            {
+                features.map((feature: any) => (
+                    <div class="flex flex-col items-center text-center p-8 bg-background-subtle rounded-3xl border border-transparent hover:border-primary/20 transition-all">
+                        <div class="w-20 h-20 rounded-2xl bg-primary text-white flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
+                            <span class="material-symbols-outlined text-4xl">
+                                {feature.icon || "check_circle"}
+                            </span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-primary mb-3">
+                            {feature.title}
+                        </h3>
+                        <p class="text-text-muted">{feature.description}</p>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>

@@ -1,0 +1,69 @@
+---
+const { data } = Astro.props;
+
+if (!data) return null;
+
+const { badges } = data;
+
+// Default badges if not provided
+const defaultBadges = [
+    {
+        icon: "emergency",
+        title: "Open 24/7/365",
+        description: "Always here when you need us",
+    },
+    {
+        icon: "verified_user",
+        title: "Insurance Accepted",
+        description: "Direct billing to major providers",
+    },
+    {
+        icon: "medical_services",
+        title: "Board-Certified",
+        description: "Expert physicians on site",
+    },
+    {
+        icon: "star",
+        title: "Top Rated Care",
+        description: "Based on 2,500+ patient reviews",
+        rating: "4.9",
+    },
+];
+
+const displayBadges = badges || defaultBadges;
+---
+
+<section class="py-16 bg-white border-b border-gray-100">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-12">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+            {
+                displayBadges.map((badge: any) => (
+                    <div class="flex flex-col items-center text-center group">
+                        <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform duration-300">
+                            {badge.rating ? (
+                                <span class="material-symbols-outlined text-4xl text-primary">
+                                    star
+                                </span>
+                            ) : (
+                                <span class="material-symbols-outlined text-4xl">
+                                    {badge.icon || "check_circle"}
+                                </span>
+                            )}
+                        </div>
+                        <h4 class="text-lg font-bold text-text-main">
+                            {badge.title}
+                        </h4>
+                        <div class="text-text-muted text-sm mt-1 flex flex-col items-center">
+                            <span>{badge.description}</span>
+                            {badge.rating && (
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded-full mt-1">
+                                    {badge.rating} Rating
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>

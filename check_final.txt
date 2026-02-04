@@ -1,0 +1,52 @@
+﻿[2m14:42:48[22m [34m[content][39m Syncing content
+[2m14:42:48[22m [34m[content][39m Synced content
+[2m14:42:48[22m [34m[types][39m Generated [2m64ms[22m
+[2m14:42:48[22m [34m[check][39m Getting diagnostics for Astro files in C:\Users\sumit\OneDrive\Desktop\ER of White Rock...
+[96msanity.config.ts[0m:[93m13[0m:[93m9[0m - [93mwarning[0m[90m ts(6385): [0m'deskTool' is deprecated.
+
+[7m13[0m         deskTool({
+[7m  [0m [93m        ~~~~~~~~[0m
+[96msanity.config.ts[0m:[93m2[0m:[93m10[0m - [93mwarning[0m[90m ts(6385): [0m'deskTool' is deprecated.
+
+[7m2[0m import { deskTool } from 'sanity/desk';
+[7m [0m [93m         ~~~~~~~~[0m
+
+[96msrc/components/sections/AboutSection.astro[0m:[93m14[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'titleColor' is declared but its value is never read.
+
+[7m14[0m const titleColor = type === "commitment" ? "text-white" : "text-primary";
+[7m  [0m [93m      ~~~~~~~~~~[0m
+
+[96msrc/components/sections/Community.astro[0m:[93m2[0m:[93m1[0m - [93mwarning[0m[90m ts(6133): [0m'urlFor' is declared but its value is never read.
+
+[7m2[0m import { urlFor } from "../../lib/sanity";
+[7m [0m [93m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96msrc/components/sections/FAQ.astro[0m:[93m19[0m:[93m37[0m - [93mwarning[0m[90m ts(6133): [0m'index' is declared but its value is never read.
+
+[7m19[0m                 faqs.map((faq: any, index: number) => (
+[7m  [0m [93m                                    ~~~~~[0m
+[96msrc/components/sections/FAQ.astro[0m:[93m6[0m:[93m9[0m - [93mwarning[0m[90m ts(6133): [0m'title' is declared but its value is never read.
+
+[7m6[0m const { title, faqs } = data;
+[7m [0m [93m        ~~~~~[0m
+
+[96msrc/components/sections/Physicians.astro[0m:[93m8[0m:[93m16[0m - [93mwarning[0m[90m ts(6133): [0m'subtitle' is declared but its value is never read.
+
+[7m8[0m const { title, subtitle, physicians } = data;
+[7m [0m [93m               ~~~~~~~~[0m
+
+[96msrc/components/sections/ServicesGrid.astro[0m:[93m2[0m:[93m1[0m - [93mwarning[0m[90m ts(6133): [0m'urlFor' is declared but its value is never read.
+
+[7m2[0m import { urlFor } from "../../lib/sanity";
+[7m [0m [93m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96msrc/lib/sanity.ts[0m:[93m11[0m:[93m17[0m - [93mwarning[0m[90m ts(6385): [0m'imageUrlBuilder' is deprecated.
+
+[7m11[0m const builder = imageUrlBuilder(client);
+[7m  [0m [93m                ~~~~~~~~~~~~~~~[0m
+
+Result (31 files): 
+- 0 errors
+- 0 warnings
+- 9 hints
+

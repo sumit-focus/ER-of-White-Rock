@@ -1,0 +1,132 @@
+---
+const { data } = Astro.props;
+
+if (!data) return null;
+
+const {
+    sectionTitle,
+    sectionSubtitle,
+    insuranceProviders,
+    governmentNote,
+    heroDiscounts,
+} = data;
+
+// Default insurance providers
+const defaultProviders = [
+    "Aetna",
+    "Humana",
+    "Kaiser Permanente",
+    "Centene",
+    "Most PPO Plans",
+    "Blue Cross Blue Shield",
+    "United Healthcare",
+    "Molina Healthcare",
+    "Workers' Compensation",
+    "Most HMO Plans",
+    "Cigna",
+    "Anthem",
+    "WellCare",
+    "Auto Insurance Claims",
+];
+
+// Default hero discounts
+const defaultDiscounts = [
+    "Police Officers",
+    "Firefighters",
+    "Active Duty Military",
+    "Veterans",
+    "Senior Citizens (65+)",
+];
+
+const displayProviders = insuranceProviders || defaultProviders;
+const displayDiscounts = heroDiscounts || defaultDiscounts;
+---
+
+<section id="insurance" class="py-24 bg-white">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-12">
+        <!-- Section Header -->
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-text-main mb-6">
+                {sectionTitle || "Insurance Plans We Accept"}
+            </h2>
+            <p class="text-text-muted text-lg">
+                {
+                    sectionSubtitle ||
+                        "We strive to make billing transparent and simple. Please check with us or your insurer to confirm coverage, as plans may vary."
+                }
+            </p>
+        </div>
+
+        <!-- Insurance Grid -->
+        <div
+            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-16"
+        >
+            {
+                displayProviders.map((provider: string) => (
+                    <div class="bg-gray-50 p-4 rounded-xl shadow-sm text-center font-bold text-text-muted flex items-center justify-center min-h-[80px] hover:text-primary transition-colors cursor-default">
+                        {provider}
+                    </div>
+                ))
+            }
+        </div>
+
+        <!-- Info Cards -->
+        <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+            <!-- Government Insurance Note -->
+            <div
+                class="bg-white p-8 rounded-2xl border-l-4 border-accent shadow-[0_4px_20px_-2px_#0000000d] hover:shadow-[0_10px_40px_-10px_#00000014] transition-all"
+            >
+                <h3
+                    class="text-xl font-bold text-text-main mb-4 flex items-center gap-2"
+                >
+                    <span class="material-symbols-outlined text-accent"
+                        >policy</span
+                    >
+                    Government Insurance
+                </h3>
+                <p class="text-text-muted leading-relaxed">
+                    {
+                        governmentNote ||
+                            "Federal rules don't let freestanding ERs like ours accept Medicare, Medicaid, CHIP, Tricare, or VA coverage. In a life-threatening emergency, we will always treat you. No one is ever turned away."
+                    }
+                </p>
+            </div>
+
+            <!-- Hero Discounts -->
+            <div
+                class="bg-primary text-white p-8 rounded-2xl shadow-[0_4px_20px_-2px_#0000000d] relative overflow-hidden group"
+            >
+                <!-- Background Icon -->
+                <div
+                    class="absolute -right-10 -bottom-10 opacity-10 group-hover:opacity-20 transition-opacity"
+                >
+                    <span class="material-symbols-outlined text-9xl"
+                        >local_police</span
+                    >
+                </div>
+
+                <div class="relative z-10">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined">verified</span>
+                        Exclusive Discounts
+                    </h3>
+                    <p class="mb-6 text-blue-100">
+                        We proudly offer special rates for our community heroes:
+                    </p>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4">
+                        {
+                            displayDiscounts.map((discount: string) => (
+                                <li class="flex items-center gap-2 text-sm font-semibold">
+                                    <span class="material-symbols-outlined text-accent">
+                                        check_circle
+                                    </span>
+                                    {discount}
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
