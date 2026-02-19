@@ -1,9 +1,11 @@
 {
     "settings": {
         "siteName": "ER of White Rock",
-        "contactPhone": "555-0123-4567",
-        "address": "123 Medical Plaza Dr, Suite 100, New York, NY 10001",
-        "email": "info@erwhiterock.com"
+        "address": "10705 Northwest Hwy, Dallas, TX 75238, United States",
+        "contact": {
+            "phone": "4699432939",
+            "email": "info@erwhiterock.com"
+        }
     },
     "hero": {
         "title": "Expert Medical Care, Without the Wait.",

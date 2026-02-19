@@ -1,0 +1,72 @@
+---
+interface Props {
+    groupedServices: Record<string, any[]>;
+}
+
+const { groupedServices } = Astro.props;
+
+// Order of categories
+const categoryOrder = [
+    "Emergency Care",
+    "Trauma & Injury",
+    "Pediatric Care",
+    "Diagnostics",
+    "Other Services",
+];
+
+// Sort keys based on order, putting unknown ones at the end
+const sortedCategories = Object.keys(groupedServices).sort((a, b) => {
+    const indexA = categoryOrder.indexOf(a);
+    const indexB = categoryOrder.indexOf(b);
+    if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+});
+---
+
+<section class="py-24 bg-background-light">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-12">
+        {
+            sortedCategories.map((category) => (
+                <div class="mb-20 last:mb-0">
+                    <div class="flex items-end gap-4 mb-10 border-b border-gray-200 pb-4">
+                        <h2 class="text-3xl md:text-4xl font-bold text-text-main tracking-tight">
+                            {category}
+                        </h2>
+                        <span class="text-accent font-bold text-lg mb-1">
+                            • {groupedServices[category].length} Services
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {groupedServices[category].map((service: any) => (
+                            <a
+                                href={`/services/${service.slug}`}
+                                class="group relative p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-300 flex flex-col h-full"
+                            >
+                                <div class="flex items-start justify-between mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                                        <span class="material-symbols-outlined text-2xl">
+                                            {service.icon || "medical_services"}
+                                        </span>
+                                    </div>
+                                    <span class="material-symbols-outlined text-gray-300 group-hover:text-accent group-hover:translate-x-1 transition-all">
+                                        arrow_forward
+                                    </span>
+                                </div>
+
+                                <h3 class="text-xl font-bold text-text-main mb-2 group-hover:text-primary transition-colors">
+                                    {service.title}
+                                </h3>
+                                <p class="text-text-muted text-sm leading-relaxed line-clamp-3">
+                                    {service.description}
+                                </p>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</section>

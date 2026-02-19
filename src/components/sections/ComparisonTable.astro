@@ -10,31 +10,17 @@ const defaultUrgentCare = [
     {
         icon: "schedule",
         title: "Limited Hours",
-        description: "Usually closes by 8 PM or 9 PM. Not available overnight.",
+        description: "Often closes at 8 PM or 9 PM.",
     },
     {
         icon: "person",
         title: "Mid-Level Providers",
-        description:
-            "Care often provided by Nurse Practitioners or PAs, rarely physicians.",
+        description: "Often staffed by Nurse Practitioners or PAs.",
     },
     {
         icon: "medical_services",
         title: "Basic Capabilities",
-        description:
-            "Limited to minor illnesses, simple X-rays, and basic stitching.",
-    },
-    {
-        icon: "block",
-        title: "No Advanced Imaging",
-        description:
-            "Typically no CT scans, Ultrasounds, or comprehensive labs on-site.",
-    },
-    {
-        icon: "ambulance",
-        title: "Not for Emergencies",
-        description:
-            "Cannot treat heart attacks, strokes, or severe trauma. Will call 911.",
+        description: "Simple X-rays, basic labs, minor illness only.",
     },
 ];
 
@@ -42,37 +28,38 @@ const defaultER = [
     {
         icon: "history_toggle_off",
         title: "Open 24/7/365",
-        description:
-            "Always open, including nights, weekends, and all holidays.",
+        description: "Always open, including holidays.",
     },
     {
         icon: "badge",
         title: "Board-Certified ER Physicians",
-        description:
-            "Expert doctors on-site at all times to treat any medical condition.",
+        description: "Expert doctors onsite at all times.",
     },
     {
         icon: "radiology",
-        title: "Full Advanced Imaging",
+        title: "Advanced Imaging & Lab",
         description:
-            "Immediate access to CT Scans, Ultrasounds, and Digital X-rays.",
-    },
-    {
-        icon: "biotech",
-        title: "COLA-Certified Laboratory",
-        description:
-            "Complete blood work and cardiac enzyme testing with results in minutes.",
+            "CT Scans, Ultrasounds, Digital X-ray, Comprehensive Labs.",
     },
     {
         icon: "ecg_heart",
-        title: "Life-Saving Care",
+        title: "Life-Threatening Care",
         description:
-            "Fully equipped for heart attacks, strokes, respiratory distress, and trauma.",
+            "Equipped for cardiac events, trauma, and severe conditions.",
     },
 ];
 
-const displayUrgentCare = urgentCareFeatures || defaultUrgentCare;
-const displayER = erFeatures || defaultER;
+const displayUrgentCare =
+    urgentCareFeatures &&
+    urgentCareFeatures[0] &&
+    typeof urgentCareFeatures[0] === "object"
+        ? urgentCareFeatures
+        : defaultUrgentCare;
+
+const displayER =
+    erFeatures && erFeatures[0] && typeof erFeatures[0] === "object"
+        ? erFeatures
+        : defaultER;
 ---
 
 <section class="py-24 bg-white border-t border-gray-100">

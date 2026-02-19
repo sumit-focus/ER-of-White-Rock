@@ -18,7 +18,7 @@ const {
 ---
 
 <section
-    class="relative w-full min-h-[85vh] flex items-center bg-white overflow-hidden py-20 lg:py-0"
+    class="relative w-full min-h-[85vh] flex items-center bg-white overflow-hidden py-12 lg:py-0"
 >
     <!-- Background Elements -->
     <div
@@ -37,7 +37,9 @@ const {
     <div class="max-w-[1440px] mx-auto px-6 lg:px-12 w-full relative z-10">
         <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <!-- Left Column: Content -->
-            <div class="flex flex-col gap-8 order-2 lg:order-1">
+            <div
+                class="flex flex-col gap-8 order-1 lg:order-1 items-center lg:items-start text-center lg:text-left"
+            >
                 <!-- Badge -->
                 <div
                     class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/5 border border-accent/20 w-fit backdrop-blur-sm"
@@ -59,7 +61,7 @@ const {
 
                 <!-- Title -->
                 <h1
-                    class="text-primary text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight"
+                    class="text-primary text-3xl sm:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight"
                 >
                     {headline}<br />
                     <span
@@ -109,28 +111,20 @@ const {
 
                 <!-- Trust Indicators -->
                 <div
-                    class="flex items-center gap-6 mt-4 opacity-80 grayscale hover:grayscale-0 transition-all duration-500"
+                    class="flex items-center gap-6 mt-4 opacity-80 grayscale hover:grayscale-0 transition-all duration-500 justify-center lg:justify-start"
                 >
                     <img
                         src="/images/google-reviews.png"
                         alt="Google Reviews"
                         class="h-8 object-contain"
-                        onError="this.style.display='none'"
+                        onerror="this.style.display='none'"
                     />
                     <div class="h-4 w-px bg-gray-300"></div>
-                    <span
-                        class="text-sm font-semibold text-text-muted flex items-center gap-1"
-                    >
-                        <span class="material-symbols-outlined text-yellow-400"
-                            >star</span
-                        >
-                        4.9/5 Rating
-                    </span>
                 </div>
             </div>
 
             <!-- Right Column: Image Box -->
-            <div class="order-1 lg:order-2 relative">
+            <div class="order-2 lg:order-2 relative">
                 <div
                     class="relative rounded-[2.5rem] overflow-hidden shadow-2xl shadow-primary/10 border-4 border-white z-10 rotate-1 hover:rotate-0 transition-transform duration-500"
                 >
@@ -142,10 +136,12 @@ const {
                                     .height(900)
                                     .url()}
                                 alt={headline || "ER of White Rock"}
-                                class="w-full h-[500px] lg:h-[650px] object-cover"
+                                width="800"
+                                height="900"
+                                class="w-full h-[400px] sm:h-[500px] lg:h-[650px] object-cover"
                             />
                         ) : (
-                            <div class="w-full h-[500px] lg:h-[650px] bg-gray-100 flex items-center justify-center text-text-muted">
+                            <div class="w-full h-[400px] sm:h-[500px] lg:h-[650px] bg-gray-100 flex items-center justify-center text-text-muted">
                                 <span class="material-symbols-outlined text-6xl">
                                     image
                                 </span>
@@ -155,7 +151,7 @@ const {
 
                     <!-- Floating Overlay Card -->
                     <div
-                        class="absolute bottom-8 left-8 right-8 bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/50"
+                        class="absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-8 sm:right-8 bg-white/95 backdrop-blur-md p-4 sm:p-6 rounded-2xl shadow-lg border border-white/50"
                     >
                         <div class="flex items-start gap-4">
                             <div

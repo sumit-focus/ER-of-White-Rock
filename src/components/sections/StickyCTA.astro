@@ -1,0 +1,54 @@
+---
+const { callNowText, callNowNumber, directionsText, directionsLink } =
+    Astro.props;
+
+if (!callNowNumber && !directionsLink) return null;
+---
+
+<div
+    class="fixed bottom-0 left-0 w-full z-50 bg-white border-t border-gray-200 shadow-lg md:hidden"
+>
+    <div class="grid grid-cols-2 gap-0">
+        {
+            callNowNumber && (
+                <a
+                    href={`tel:${callNowNumber}`}
+                    class="flex items-center justify-center p-4 bg-primary text-white font-bold text-center hover:bg-primary-dark transition-colors"
+                >
+                    <span class="material-symbols-outlined mr-2">call</span>
+                    {callNowText || "Call Now"}
+                </a>
+            )
+        }
+        {
+            directionsLink && (
+                <a
+                    href={directionsLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex items-center justify-center p-4 bg-accent text-white font-bold text-center hover:bg-accent-dark transition-colors"
+                >
+                    <span class="material-symbols-outlined mr-2">
+                        location_on
+                    </span>
+                    {directionsText || "Get Directions"}
+                </a>
+            )
+        }
+    </div>
+</div>
+
+<!-- Desktop/Tablet Floating Version (Optional - keeps it accessible but not full width) -->
+<div class="hidden md:flex fixed bottom-8 right-8 z-50 gap-4">
+    {
+        callNowNumber && (
+            <a
+                href={`tel:${callNowNumber}`}
+                class="flex items-center justify-center px-6 py-3 bg-primary text-white font-bold rounded-full shadow-xl hover:scale-105 transition-transform"
+            >
+                <span class="material-symbols-outlined mr-2">call</span>
+                {callNowText || "Call Now"}
+            </a>
+        )
+    }
+</div>

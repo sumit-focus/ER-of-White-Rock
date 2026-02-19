@@ -1,0 +1,128 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ServiceHero from "../../components/sections/ServiceHero.astro";
+import ServicesGrouped from "../../components/sections/ServicesGrouped.astro";
+import WhyChoose from "../../components/sections/WhyChoose.astro";
+import CTA from "../../components/sections/CTA.astro";
+import { sanityClient } from "sanity:client";
+
+// Fetch all services
+const services = await sanityClient.fetch(`
+  *[_type == "service" && !(_id in path("drafts.**"))]|order(order asc) {
+    title,
+    "slug": slug.current,
+    description,
+    icon,
+    category
+  }
+`);
+
+// Define preferred order for categories
+const categoryOrder = [
+    "Medical Services",
+    "Emergency Care",
+    "Pediatric ER",
+    "Trauma & Injury",
+    "Diagnostics & Imaging",
+    "Laboratory Services",
+    "Other Services",
+];
+
+// Group services by category
+const groupedServices = services.reduce((acc: any, service: any) => {
+    const category = service.category || "Other Services";
+    if (!acc[category]) {
+        acc[category] = [];
+    }
+    acc[category].push(service);
+    return acc;
+}, {});
+
+// Sort object keys based on preferred order
+const sortedGroupedServices = Object.keys(groupedServices)
+    .filter((key) => key !== "Other Services")
+    .sort((a, b) => {
+        const indexA = categoryOrder.indexOf(a);
+        const indexB = categoryOrder.indexOf(b);
+        // If both are in the list, sort by index
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+        // If only a is in the list, it comes first
+        if (indexA !== -1) return -1;
+        // If only b is in the list, it comes first
+        if (indexB !== -1) return 1;
+        // If neither, sort alphabetically
+        return a.localeCompare(b);
+    })
+    .reduce((obj: any, key) => {
+        obj[key] = groupedServices[key];
+        return obj;
+    }, {});
+
+// Hero Data
+const heroData = {
+    headline: "Our Medical Services",
+    subtitle:
+        "Comprehensive, state-of-the-art emergency care for your entire family. Open 24/7/365.",
+    // You might want to add a specific background image for this index page later
+};
+
+const whyChooseData = {
+    title: "Why Choose ER of White Rock?",
+    subtitle:
+        "We redefine emergency care by putting the patient first, combining speed, expertise, and advanced technology.",
+    features: [
+        {
+            title: "No Wait Times",
+            description:
+                "Experience immediate triage and bedside care. We prioritize getting you seen by a doctor the moment you arrive.",
+            icon: "timer_off",
+        },
+        {
+            title: "Board-Certified Care",
+            description:
+                "Our facility is staffed exclusively by ER-trained physicians and nurses who are experts in emergency medicine and trauma care.",
+            icon: "medical_information",
+        },
+        {
+            title: "Advanced Technology",
+            description:
+                "Equipped with on-site CT scans, digital X-rays, ultrasounds, and a full-service laboratory for rapid and accurate diagnosis.",
+            icon: "biotech",
+        },
+    ],
+};
+
+// JSON-LD CollectionPage Schema
+const schema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Medical Services at ER of White Rock",
+    description:
+        "Comprehensive list of emergency medical services offered at ER of White Rock, Dallas.",
+    mainEntity: {
+        "@type": "ItemList",
+        itemListElement: services.map((service: any, index: number) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            url: `https://erofwhiterock.com/services/${service.slug}`,
+            name: service.title,
+        })),
+    },
+};
+---
+
+<Layout
+    title="Our Services | ER of White Rock - 24/7 Emergency Care"
+    description="Explore our comprehensive emergency medical services including cardiac care, trauma, pediatric ER, and advanced diagnostics."
+>
+    <!-- JSON-LD Injection -->
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+    <ServiceHero data={heroData} title="Our Services" />
+
+    <ServicesGrouped groupedServices={sortedGroupedServices} />
+
+    <WhyChoose data={whyChooseData} />
+
+    <CTA />
+</Layout>

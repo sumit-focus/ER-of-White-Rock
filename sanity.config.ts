@@ -23,6 +23,27 @@ export default defineConfig({
                                     .documentId('landingPage')
                             ),
                         S.listItem()
+                            .title('Insurance & Billing')
+                            .child(
+                                S.document()
+                                    .schemaType('insurancePage')
+                                    .documentId('insurancePage')
+                            ),
+                        S.listItem()
+                            .title('Contact Us')
+                            .child(
+                                S.document()
+                                    .schemaType('contactPage')
+                                    .documentId('contactPage')
+                            ),
+                        S.listItem()
+                            .title('About Us')
+                            .child(
+                                S.document()
+                                    .schemaType('aboutPage')
+                                    .documentId('aboutPage')
+                            ),
+                        S.listItem()
                             .title('Site Settings')
                             .child(
                                 S.document()
@@ -31,7 +52,7 @@ export default defineConfig({
                             ),
                         S.divider(),
                         ...S.documentTypeListItems().filter(
-                            (listItem: any) => !['landingPage', 'settings'].includes(listItem.getId() as string)
+                            (listItem: any) => !['landingPage', 'settings', 'insurancePage', 'contactPage', 'aboutPage'].includes(listItem.getId() as string)
                         ),
                     ]),
         }),
@@ -40,12 +61,12 @@ export default defineConfig({
     schema: {
         types: schemaTypes,
         templates: (templates) =>
-            templates.filter(({ schemaType }) => !['landingPage', 'settings'].includes(schemaType)),
+            templates.filter(({ schemaType }) => !['landingPage', 'settings', 'insurancePage', 'contactPage', 'aboutPage'].includes(schemaType)),
     },
 
     document: {
         actions: (input, context) =>
-            ['landingPage', 'settings'].includes(context.schemaType)
+            ['landingPage', 'settings', 'insurancePage', 'contactPage', 'aboutPage'].includes(context.schemaType)
                 ? input.filter(({ action }) => action && ['publish', 'discardChanges', 'restore'].includes(action))
                 : input,
     },

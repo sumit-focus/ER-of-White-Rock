@@ -1,0 +1,88 @@
+---
+interface Approach {
+    title: string;
+    description?: string;
+    icon?: string;
+}
+
+interface Props {
+    data: {
+        title?: string;
+        description?: string;
+        approaches?: Approach[];
+    };
+}
+
+const { data } = Astro.props;
+if (!data) return null;
+---
+
+<section class="py-16 lg:py-20 bg-gray-50">
+    <div class="max-w-5xl mx-auto px-6 lg:px-12">
+        {
+            data.title && (
+                <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 text-center">
+                    {data.title}
+                </h2>
+            )
+        }
+        {
+            data.description && (
+                <p class="text-lg text-gray-600 mb-12 text-center max-w-3xl mx-auto">
+                    {data.description}
+                </p>
+            )
+        }
+
+        <div class="relative">
+            {/* Connecting line */}
+            <div
+                class="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-primary/20 -translate-x-1/2"
+            >
+            </div>
+
+            <div class="space-y-8">
+                {
+                    data.approaches?.map((a, i) => {
+                        const isEven = i % 2 === 0;
+                        return (
+                            <div
+                                class={`flex flex-col md:flex-row items-center gap-6 ${!isEven ? "md:flex-row-reverse" : ""}`}
+                            >
+                                <div
+                                    class={`flex-1 ${isEven ? "md:text-right" : "md:text-left"}`}
+                                >
+                                    <div
+                                        class={`bg-white rounded-xl p-6 shadow-sm border border-gray-100 inline-block text-left`}
+                                    >
+                                        <h3 class="font-bold text-gray-900 text-lg mb-2">
+                                            {a.title}
+                                        </h3>
+                                        {a.description && (
+                                            <p class="text-gray-600 text-sm leading-relaxed">
+                                                {a.description}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                                {/* Step number */}
+                                <div class="relative z-10 flex-shrink-0 w-14 h-14 rounded-full bg-primary flex items-center justify-center shadow-lg">
+                                    {a.icon ? (
+                                        <span class="material-symbols-outlined text-2xl text-white">
+                                            {a.icon}
+                                        </span>
+                                    ) : (
+                                        <span class="text-white font-bold text-lg">
+                                            {i + 1}
+                                        </span>
+                                    )}
+                                </div>
+                                <div class="flex-1 hidden md:block" />
+                            </div>
+                        );
+                    })
+                }
+            </div>
+        </div>
+    </div>
+</section>

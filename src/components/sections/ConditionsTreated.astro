@@ -1,0 +1,61 @@
+---
+interface Condition {
+    name: string;
+    description?: string;
+    icon?: string;
+}
+
+interface Props {
+    data: {
+        title?: string;
+        description?: string;
+        conditions?: Condition[];
+    };
+}
+
+const { data } = Astro.props;
+if (!data) return null;
+---
+
+<section class="py-16 lg:py-20 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6 lg:px-12">
+        {
+            data.title && (
+                <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 text-center">
+                    {data.title}
+                </h2>
+            )
+        }
+        {
+            data.description && (
+                <p class="text-lg text-gray-600 mb-10 text-center max-w-3xl mx-auto">
+                    {data.description}
+                </p>
+            )
+        }
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {
+                data.conditions?.map((c) => (
+                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                        {c.icon && (
+                            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                                <span class="material-symbols-outlined text-2xl text-primary">
+                                    {c.icon}
+                                </span>
+                            </div>
+                        )}
+                        <h3 class="font-bold text-gray-900 text-lg mb-2">
+                            {c.name}
+                        </h3>
+                        {c.description && (
+                            <p class="text-gray-600 text-sm leading-relaxed">
+                                {c.description}
+                            </p>
+                        )}
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>

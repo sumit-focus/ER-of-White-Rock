@@ -9,6 +9,16 @@ export default {
             type: 'string',
         },
         {
+            name: 'slug',
+            title: 'URL Slug',
+            type: 'slug',
+            options: {
+                source: 'title',
+                maxLength: 96,
+            },
+            validation: (Rule: any) => Rule.required()
+        },
+        {
             name: 'content',
             title: 'Page Sections',
             type: 'array',
@@ -16,7 +26,7 @@ export default {
                 { type: 'hero' },
                 { type: 'trustBadges' },
                 { type: 'insuranceBar' },
-                { type: 'aboutSection' },
+                { type: 'physiciansSection' },
                 { type: 'physiciansSection' },
                 { type: 'whyChooseSection' },
                 { type: 'servicesSection' },

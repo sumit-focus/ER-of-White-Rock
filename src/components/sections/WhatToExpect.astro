@@ -13,7 +13,7 @@ const defaultSteps = [
     { number: 4, title: "Care & Discharge", description: "Compassionate treatment with a clear follow-up plan or seamless transfer." },
 ];
 
-const displaySteps = steps || defaultSteps;
+const displaySteps = (steps || defaultSteps).slice(0, 4);
 ---
 
 <section class="py-24 bg-gray-50">

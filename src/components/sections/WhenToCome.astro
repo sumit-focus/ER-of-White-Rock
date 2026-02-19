@@ -3,54 +3,82 @@ const { data } = Astro.props;
 
 if (!data) return null;
 
-const { sectionTitle, sectionSubtitle, symptoms } = data;
+const { title, conditions, symptoms, sectionTitle, sectionSubtitle } = data;
 
-// Default symptoms if not provided
-const defaultSymptoms = [
-    { icon: "cardiology", title: "Chest Pain" },
-    { icon: "thermometer", title: "High Fever" },
-    { icon: "orthopedics", title: "Broken Bones" },
-    { icon: "sentiment_very_dissatisfied", title: "Severe Pain" },
-    { icon: "healing", title: "Deep Cuts" },
-    { icon: "pulmonology", title: "Breathing Issues" },
-    { icon: "sick", title: "Head Injury" },
-    { icon: "coronavirus", title: "Severe Flu" },
-];
+// Normalize data props
+const displayTitle = sectionTitle || title || "When should you visit the ER?";
+const displaySubtitle =
+    sectionSubtitle ||
+    "If you are experiencing any of these symptoms, please visit us immediately or call 911 for life-threatening emergencies.";
 
-const displaySymptoms = symptoms || defaultSymptoms;
+// Support both 'conditions' (new schema) and 'symptoms' (old schema)
+const displayItems = conditions ||
+    symptoms || [
+        { icon: "cardiology", title: "Chest Pain" },
+        { icon: "thermometer", title: "High Fever" },
+        { icon: "orthopedics", title: "Broken Bones" },
+        { icon: "sentiment_very_dissatisfied", title: "Severe Pain" },
+    ];
+
+// Determine if this is a "Red Alert" section (e.g. for Chest Pain page)
+// We check if the title mentions "Chest Pain" or "Emergency" to auto-apply high contrast
+const isRedAlert =
+    displayTitle.toLowerCase().includes("chest pain") ||
+    displayTitle.toLowerCase().includes("emergency") ||
+    displayTitle.toLowerCase().includes("heart attack");
+
+// Styles
+const sectionClass = isRedAlert
+    ? "py-24 bg-red-50"
+    : "py-24 bg-background-subtle";
+const titleClass = isRedAlert
+    ? "text-4xl md:text-5xl font-bold text-red-700 tracking-tight mb-6"
+    : "text-4xl md:text-5xl font-bold text-text-main tracking-tight mb-6";
+const cardClass = isRedAlert
+    ? "flex flex-col items-center justify-center p-8 rounded-2xl bg-white text-center shadow-lg border-2 border-red-100 hover:border-red-500 transition-all hover:-translate-y-1 group cursor-default"
+    : "flex flex-col items-center justify-center p-8 rounded-2xl bg-white text-center shadow-sm hover:shadow-md transition-all hover:-translate-y-1 group cursor-default";
+const iconBgClass = isRedAlert
+    ? "w-16 h-16 rounded-full bg-red-100 text-red-600 flex items-center justify-center mb-4"
+    : "material-symbols-outlined text-accent text-4xl mb-4 group-hover:scale-110 transition-transform"; // Adjusted structure for icon
+const iconTextClass = isRedAlert ? "text-3xl material-symbols-outlined" : "";
 ---
 
-<section class="py-24 bg-background-subtle">
+<section class={sectionClass}>
     <div class="max-w-[1440px] mx-auto px-6 lg:px-12">
         <!-- Section Header -->
         <div class="text-center max-w-3xl mx-auto mb-16">
             <span
                 class="text-accent font-bold text-sm tracking-widest uppercase mb-3 block"
-                >Symptom Checker</span
             >
-            <h2
-                class="text-4xl md:text-5xl font-bold text-text-main tracking-tight mb-6"
-            >
-                {sectionTitle || "When should you visit the ER?"}
+                {isRedAlert ? "Critical Symptoms" : "Symptom Checker"}
+            </span>
+            <h2 class={titleClass}>
+                {displayTitle}
             </h2>
             <p class="text-lg text-text-muted">
-                {
-                    sectionSubtitle ||
-                        "If you are experiencing any of these symptoms, please visit us immediately or call 911 for life-threatening emergencies."
-                }
+                {displaySubtitle}
             </p>
         </div>
 
         <!-- Symptoms Grid -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             {
-                displaySymptoms.map((symptom: any) => (
-                    <div class="flex flex-col items-center justify-center p-8 rounded-2xl bg-white text-center shadow-sm hover:shadow-md transition-all hover:-translate-y-1 group cursor-default">
-                        <span class="material-symbols-outlined text-accent text-4xl mb-4 group-hover:scale-110 transition-transform">
-                            {symptom.icon || "warning"}
-                        </span>
+                displayItems.map((item: any) => (
+                    <div class={cardClass}>
+                        {isRedAlert ? (
+                            <div class={iconBgClass}>
+                                <span class={iconTextClass}>
+                                    {item.icon || "warning"}
+                                </span>
+                            </div>
+                        ) : (
+                            <span class={iconBgClass}>
+                                {item.icon || "warning"}
+                            </span>
+                        )}
+
                         <span class="font-bold text-lg text-text-main">
-                            {symptom.title}
+                            {item.title || item.condition}
                         </span>
                     </div>
                 ))

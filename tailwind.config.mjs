@@ -1,8 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
-	theme: {
-		extend: {
+    content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+    theme: {
+        extend: {
             borderRadius: {
                 'none': '0',
                 'sm': '0',
@@ -18,11 +18,13 @@ export default {
                 primary: '#0F172A', // Deep Navy
                 accent: '#DC2626', // Emergency Red
                 secondary: '#334155', // Slate 700
+                'text-main': '#0F172A',
+                'text-muted': '#64748B',
             },
             fontFamily: {
                 sans: ['Inter', 'sans-serif'],
             }
         },
-	},
-	plugins: [],
+    },
+    plugins: [],
 }

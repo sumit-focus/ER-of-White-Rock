@@ -1,0 +1,358 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { sanityClient } from "sanity:client";
+import { urlFor } from "../../lib/sanity";
+import { PortableText } from "astro-portabletext";
+import Breadcrumbs from "../../components/seo/Breadcrumbs.astro";
+import ShareButtons from "../../components/seo/ShareButtons.astro";
+
+const { slug } = Astro.params;
+
+if (!slug) {
+    return Astro.redirect("/404");
+}
+
+const post = await sanityClient.fetch(
+    `*[_type == "post" && slug.current == $slug][0] {
+    ...,
+    "author": author->,
+    "reviewer": reviewer->,
+    "categories": categories[]->,
+    "relatedPosts": relatedPosts[]->{
+      title,
+      slug,
+      mainImage,
+      excerpt,
+      publishedAt,
+      "categories": categories[]->title
+    }
+  }`,
+    { slug },
+);
+
+if (!post) {
+    return Astro.redirect("/404");
+}
+
+// --- Helpers for TOC & Reading Time ---
+
+function getHeadings(blocks: any[]) {
+    if (!blocks) return [];
+    return blocks
+        .filter(
+            (block) => block._type === "block" && block.style.startsWith("h"),
+        )
+        .map((block) => ({
+            text: block.children.map((child: any) => child.text).join(""),
+            slug: block.children
+                .map((child: any) => child.text)
+                .join("")
+                .toLowerCase()
+                .replace(/[^\w\s-]/g, "")
+                .replace(/\s+/g, "-"),
+            style: block.style,
+        }));
+}
+
+function getReadingTime(blocks: any[]) {
+    if (!blocks) return 0;
+    const text = blocks
+        .filter((block) => block._type === "block")
+        .map((block) => block.children.map((child: any) => child.text).join(""))
+        .join(" ");
+    const words = text.split(/\s+/).length;
+    return Math.ceil(words / 200);
+}
+
+const headings = getHeadings(post.body);
+const readingTime = getReadingTime(post.body);
+const breadcrumbItems = [
+    { label: "Blog", href: "/blog" },
+    { label: post.title, href: Astro.url.href },
+];
+
+// --- JSON-LD Schema ---
+
+const schema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.seo?.metaTitle || post.title,
+    image: post.mainImage ? urlFor(post.mainImage).url() : undefined,
+    datePublished: post.publishedAt,
+    dateModified: post._updatedAt,
+    author: post.author
+        ? {
+              "@type": "Person",
+              name: post.author.name,
+              url: `/physicians/${post.author.slug?.current}`, // Assuming author page or bio link
+          }
+        : undefined,
+    publisher: {
+        "@type": "Organization",
+        name: "ER of White Rock",
+        logo: {
+            "@type": "ImageObject",
+            url: "https://erofwhiterock.com/logo.png", // Replace with actual logo URL
+        },
+    },
+    description: post.seo?.metaDescription || post.excerpt,
+};
+
+// Components for PortableText to render IDs for headings
+const components = {
+    block: {
+        h2: ({ node, children }: any) => {
+            const slug = node.children[0].text
+                .toLowerCase()
+                .replace(/[^\w\s-]/g, "")
+                .replace(/\s+/g, "-");
+            return `<h2 id="${slug}" class="text-3xl font-bold mt-12 mb-6 text-gray-900 scroll-mt-32">${children}</h2>`;
+        },
+        h3: ({ node, children }: any) => {
+            const slug = node.children[0].text
+                .toLowerCase()
+                .replace(/[^\w\s-]/g, "")
+                .replace(/\s+/g, "-");
+            return `<h3 id="${slug}" class="text-2xl font-bold mt-8 mb-4 text-gray-800 scroll-mt-32">${children}</h3>`;
+        },
+        normal: ({ children }: any) =>
+            `<p class="mb-6 text-lg leading-relaxed text-gray-700">${children}</p>`,
+        blockquote: ({ children }: any) =>
+            `<blockquote class="border-l-4 border-primary pl-6 py-2 my-8 italic text-xl text-gray-800 bg-gray-50 rounded-r-lg">${children}</blockquote>`,
+    },
+    marks: {
+        link: ({ value, children }: any) => {
+            const { href, blank, rel } = value;
+            return `<a href="${href}" ${blank ? 'target="_blank" rel="noopener"' : ""} ${rel ? `rel="${rel}"` : ""} class="text-primary font-bold hover:underline transition-colors">${children}</a>`;
+        },
+    },
+};
+---
+
+<Layout
+    title={post.seo?.metaTitle || post.title}
+    description={post.seo?.metaDescription || post.excerpt}
+    ogImage={post.mainImage
+        ? urlFor(post.mainImage).width(1200).height(630).url()
+        : undefined}
+    ogType="article"
+>
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+    <article class="py-20 bg-white">
+        {/* Header / Hero */}
+        <header class="max-w-4xl mx-auto px-6 lg:px-8 mb-16 text-center">
+            <Breadcrumbs items={breadcrumbItems} />
+
+            {
+                post.categories && post.categories.length > 0 && (
+                    <div class="flex justify-center gap-2 mb-6">
+                        {post.categories.map((cat: any) => (
+                            <span class="bg-blue-50 text-primary px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider">
+                                {cat.title}
+                            </span>
+                        ))}
+                    </div>
+                )
+            }
+
+            <h1
+                class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-8 leading-tight"
+            >
+                {post.title}
+            </h1>
+
+            <div
+                class="flex flex-wrap items-center justify-center gap-6 text-gray-500 font-medium text-lg"
+            >
+                {
+                    post.author && (
+                        <div class="flex items-center gap-2">
+                            {post.author.image && (
+                                <img
+                                    src={urlFor(post.author.image)
+                                        .width(40)
+                                        .height(40)
+                                        .fit("crop")
+                                        .url()}
+                                    alt={post.author.name}
+                                    class="w-10 h-10 rounded-full border border-gray-100"
+                                />
+                            )}
+                            <span>By {post.author.name}</span>
+                        </div>
+                    )
+                }
+                <span class="hidden md:inline">•</span>
+                <span>
+                    {
+                        new Date(post.publishedAt).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                        })
+                    }
+                </span>
+                <span class="hidden md:inline">•</span>
+                <div class="flex items-center gap-1">
+                    <span class="material-symbols-outlined text-lg"
+                        >schedule</span
+                    >
+                    {readingTime} min read
+                </div>
+            </div>
+        </header>
+
+        {/* Main Image */}
+        {
+            post.mainImage && (
+                <div class="max-w-6xl mx-auto px-6 lg:px-8 mb-16">
+                    <div class="aspect-[21/9] rounded-3xl overflow-hidden shadow-xl">
+                        <img
+                            src={urlFor(post.mainImage)
+                                .width(1200)
+                                .height(600)
+                                .url()}
+                            alt={post.mainImage.alt || post.title}
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+                </div>
+            )
+        }
+
+        <div
+            class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row gap-16"
+        >
+            {/* Sidebar (TOC) */}
+            <aside class="hidden lg:block w-80 flex-shrink-0">
+                <div class="sticky top-32">
+                    <h4
+                        class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-6 border-b pb-2"
+                    >
+                        In this article
+                    </h4>
+                    <nav class="space-y-3">
+                        {
+                            headings.map((heading: any) => (
+                                <a
+                                    href={`#${heading.slug}`}
+                                    class={`block text-gray-600 hover:text-primary transition-colors text-sm leading-relaxed ${
+                                        heading.style === "h3"
+                                            ? "pl-4 border-l-2 border-gray-100"
+                                            : ""
+                                    }`}
+                                >
+                                    {heading.text}
+                                </a>
+                            ))
+                        }
+                    </nav>
+
+                    {/* Medical Reviewer Widget */}
+                    {
+                        post.reviewer && (
+                            <div class="mt-12 bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                                <p class="text-xs text-blue-400 font-bold uppercase tracking-wider mb-3">
+                                    Medically Reviewed By
+                                </p>
+                                <div class="flex items-center gap-3">
+                                    {post.reviewer.headshot && (
+                                        <img
+                                            src={urlFor(post.reviewer.headshot)
+                                                .width(50)
+                                                .height(50)
+                                                .fit("crop")
+                                                .url()}
+                                            class="w-12 h-12 rounded-full"
+                                            alt={post.reviewer.name}
+                                        />
+                                    )}
+                                    <div>
+                                        <p class="font-bold text-gray-900 leading-tight">
+                                            {post.reviewer.name}
+                                        </p>
+                                        <p class="text-xs text-gray-500">
+                                            {post.reviewer.title}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    }
+                </div>
+            </aside>
+
+            {/* Content */}
+            <div class="flex-grow prose prose-lg prose-blue max-w-none">
+                {/* Mobile Medical Reviewer */}
+                {
+                    post.reviewer && (
+                        <div class="lg:hidden mb-10 bg-blue-50 p-4 rounded-xl border border-blue-100 flex items-center gap-4">
+                            <div class="bg-blue-100 p-2 rounded-full text-blue-600">
+                                <span class="material-symbols-outlined">
+                                    verified_user
+                                </span>
+                            </div>
+                            <div>
+                                <p class="text-xs text-blue-500 font-bold uppercase">
+                                    Medically Reviewed
+                                </p>
+                                <p class="font-bold text-gray-900">
+                                    {post.reviewer.name},{" "}
+                                    {post.reviewer.credentials}
+                                </p>
+                            </div>
+                        </div>
+                    )
+                }
+
+                <PortableText value={post.body} components={components} />
+            </div>
+        </div>
+
+        {/* Related Posts */}
+        {
+            post.relatedPosts && post.relatedPosts.length > 0 && (
+                <section class="max-w-7xl mx-auto px-6 lg:px-8 mt-24 pt-16 border-t border-gray-100">
+                    <h3 class="text-3xl font-bold text-gray-900 mb-10">
+                        Related Articles
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {post.relatedPosts.map((related: any) => (
+                            <a
+                                href={`/blog/${related.slug.current}`}
+                                class="group"
+                            >
+                                <div class="aspect-video rounded-2xl overflow-hidden bg-gray-100 mb-4">
+                                    {related.mainImage ? (
+                                        <img
+                                            src={urlFor(related.mainImage)
+                                                .width(400)
+                                                .height(250)
+                                                .url()}
+                                            alt={related.title}
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                        />
+                                    ) : (
+                                        <div class="w-full h-full flex items-center justify-center text-gray-300">
+                                            <span class="material-symbols-outlined text-4xl">
+                                                image
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+                                <p class="text-sm text-primary font-bold mb-2">
+                                    {related.categories?.[0]}
+                                </p>
+                                <h4 class="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors leading-snug">
+                                    {related.title}
+                                </h4>
+                            </a>
+                        ))}
+                    </div>
+                </section>
+            )
+        }
+    </article>
+</Layout>

@@ -1,0 +1,246 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { sanityClient } from "sanity:client";
+import { PortableText } from "astro-portabletext";
+import FAQ from "../components/sections/FAQ.astro";
+import ContactForm from "../components/forms/ContactForm";
+
+// Fetch Contact Page Data
+const contactPage = await sanityClient.fetch(`*[_type == "contactPage"][0]`);
+
+if (!contactPage) {
+    return Astro.redirect("/404");
+}
+
+const { seo, hero, contactMethods, map, whatToBring, faq, cta } = contactPage;
+---
+
+<Layout
+    title={seo?.metaTitle || hero?.title}
+    description={seo?.metaDescription}
+>
+    <!-- Hero Section -->
+    <section
+        class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-primary text-white"
+    >
+        <div
+            class="absolute inset-0 bg-[url('/images/pattern-bg.svg')] opacity-10 mix-blend-overlay"
+        >
+        </div>
+        <div
+            class="absolute inset-0 bg-gradient-to-br from-primary via-primary to-accent opacity-90"
+        >
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 text-center">
+            <h1
+                class="text-5xl md:text-6xl lg:text-7xl font-black mb-8 tracking-tight"
+            >
+                {hero?.title}
+            </h1>
+
+            {
+                hero?.emergencyDisclaimer && (
+                    <div class="inline-flex items-center gap-3 px-6 py-3 bg-red-600/20 border border-red-500/50 rounded-full text-red-100 backdrop-blur-sm animate-pulse">
+                        <span class="material-symbols-outlined text-red-500">
+                            warning
+                        </span>
+                        <span class="font-medium text-sm md:text-base">
+                            {hero.emergencyDisclaimer}
+                        </span>
+                    </div>
+                )
+            }
+        </div>
+    </section>
+
+    <!-- Contact Methods Grid -->
+    <section class="py-20 -mt-20 relative z-20 px-6 lg:px-12">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+                {/* Phone */}
+                <div
+                    class="bg-white p-8 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 flex flex-col items-center text-center hover:-translate-y-1 transition-transform duration-300"
+                >
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-blue-50 text-primary flex items-center justify-center mb-6"
+                    >
+                        <span class="material-symbols-outlined text-4xl"
+                            >{contactMethods?.phone?.icon || "call"}</span
+                        >
+                    </div>
+                    <h3 class="text-xl font-bold text-text-main mb-2">
+                        {contactMethods?.phone?.title}
+                    </h3>
+                    <p class="text-2xl font-black text-accent mb-4">
+                        {contactMethods?.phone?.number}
+                    </p>
+                    <a
+                        href={`tel:${contactMethods?.phone?.number}`}
+                        class="text-sm font-bold text-primary hover:text-accent uppercase tracking-wider underline decoration-2 underline-offset-4"
+                    >
+                        Call Now
+                    </a>
+                </div>
+
+                {/* Address */}
+                <div
+                    class="bg-white p-8 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 flex flex-col items-center text-center hover:-translate-y-1 transition-transform duration-300"
+                >
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-blue-50 text-primary flex items-center justify-center mb-6"
+                    >
+                        <span class="material-symbols-outlined text-4xl"
+                            >{
+                                contactMethods?.address?.icon || "location_on"
+                            }</span
+                        >
+                    </div>
+                    <h3 class="text-xl font-bold text-text-main mb-2">
+                        {contactMethods?.address?.title}
+                    </h3>
+                    <p class="text-lg text-text-muted mb-1">
+                        {contactMethods?.address?.line1}
+                    </p>
+                    <p class="text-lg text-text-muted mb-4">
+                        {contactMethods?.address?.line2}
+                    </p>
+                    <a
+                        href={contactMethods?.address?.mapLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-sm font-bold text-primary hover:text-accent uppercase tracking-wider underline decoration-2 underline-offset-4"
+                    >
+                        Get Directions
+                    </a>
+                </div>
+
+                {/* Hours */}
+                <div
+                    class="bg-white p-8 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 flex flex-col items-center text-center hover:-translate-y-1 transition-transform duration-300"
+                >
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-blue-50 text-primary flex items-center justify-center mb-6"
+                    >
+                        <span class="material-symbols-outlined text-4xl"
+                            >{contactMethods?.hours?.icon || "schedule"}</span
+                        >
+                    </div>
+                    <h3 class="text-xl font-bold text-text-main mb-2">
+                        {contactMethods?.hours?.title}
+                    </h3>
+                    <p class="text-lg text-text-muted">
+                        {contactMethods?.hours?.description}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="py-12 lg:py-20 bg-gray-50 relative z-20">
+        <div class="max-w-3xl mx-auto px-6 lg:px-12">
+            <ContactForm client:load />
+        </div>
+    </section>
+
+    <!-- Map & Directions -->
+    <section id="map" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div
+                class="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden flex flex-col lg:flex-row"
+            >
+                <div
+                    class="lg:w-1/2 min-h-[400px] lg:min-h-[500px] bg-gray-200"
+                >
+                    {/* Map Embed - Render HTML */}
+                    <div
+                        class="w-full h-full"
+                        set:html={map?.embedCode ||
+                            '<div class="w-full h-full flex items-center justify-center text-gray-400 font-bold">Map Placeholder</div>'}
+                    />
+                </div>
+                <div class="lg:w-1/2 p-8 lg:p-16 flex flex-col justify-center">
+                    <h2 class="text-3xl font-bold text-text-main mb-6">
+                        {map?.directionsTitle}
+                    </h2>
+                    <div class="prose prose-lg text-text-muted mb-8">
+                        <PortableText value={map?.directionsContent} />
+                    </div>
+                    <a
+                        href={contactMethods?.address?.mapLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-xl font-bold shadow-lg shadow-primary/20 hover:bg-secondary transition-colors w-fit"
+                    >
+                        <span class="material-symbols-outlined">directions</span
+                        >
+                        Open in Google Maps
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What To Bring Checklist -->
+    <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-6 lg:px-12">
+            <div
+                class="bg-blue-50 rounded-3xl p-8 lg:p-12 border border-blue-100"
+            >
+                <div class="text-center mb-10">
+                    <span
+                        class="material-symbols-outlined text-5xl text-accent mb-4"
+                        >medical_information</span
+                    >
+                    <h2 class="text-3xl font-bold text-text-main">
+                        {whatToBring?.title}
+                    </h2>
+                </div>
+
+                <ul class="grid md:grid-cols-1 gap-4 max-w-2xl mx-auto">
+                    {
+                        whatToBring?.checklist?.map((item: string) => (
+                            <li class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm border border-blue-100/50">
+                                <span class="material-symbols-outlined text-green-500 shrink-0">
+                                    check_circle
+                                </span>
+                                <span class="font-medium text-text-main text-lg">
+                                    {item}
+                                </span>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <FAQ data={{ sectionTitle: "Frequently Asked Questions", faqs: faq }} />
+
+    <!-- Final CTA -->
+    {
+        cta && (
+            <section class="py-20 bg-accent text-white text-center">
+                <div class="max-w-4xl mx-auto px-6 lg:px-12">
+                    <h2 class="text-4xl lg:text-5xl font-black mb-6">
+                        {cta.title}
+                    </h2>
+                    <p class="text-xl text-white/90 mb-10 max-w-2xl mx-auto">
+                        {cta.description}
+                    </p>
+                    <a
+                        href={cta.buttonLink}
+                        class="inline-flex items-center gap-2 bg-white text-accent px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-colors shadow-xl"
+                    >
+                        <span>{cta.buttonText}</span>
+                        <span class="material-symbols-outlined">
+                            arrow_forward
+                        </span>
+                    </a>
+                </div>
+            </section>
+        )
+    }
+</Layout>

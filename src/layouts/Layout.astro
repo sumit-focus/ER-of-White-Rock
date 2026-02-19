@@ -1,12 +1,25 @@
 ---
 import "../styles/global.css";
 import { getSettings, urlFor } from "../lib/sanity";
+import ServicesMenu from "../components/layout/ServicesMenu.astro";
 
 interface Props {
     title: string;
+    description?: string;
+    pageSchema?: string;
+    hideStickyCTA?: boolean;
+    ogImage?: string;
+    ogType?: string;
 }
 
-const { title } = Astro.props;
+const {
+    title,
+    description,
+    pageSchema,
+    hideStickyCTA = false,
+    ogImage,
+    ogType = "website",
+} = Astro.props;
 
 // Fetch Site Settings
 const settings = await getSettings().catch(() => null);
@@ -14,22 +27,127 @@ const settings = await getSettings().catch(() => null);
 // Default Settings
 const defaultSettings = {
     siteName: "ER of White Rock",
-    contactPhone: "555-0123-4567",
-    address: "10705 Northwest Hwy, Dallas, TX 75238",
+    tagline: "Emergency Care",
+    contactPhone: "4699432939",
+    address: "10705 Northwest Hwy, Dallas, TX 75238, United States",
     email: "info@erwhiterock.com",
+    googleMapsUrl: "https://maps.app.goo.gl/kCShLM1aCLHoPFZq8",
     logo: null,
     footerLogo: null,
+    headerLinks: [
+        { label: "Our Physicians", url: "#physicians", isActive: true },
+        {
+            label: "Ins. & Billing Info",
+            url: "/insurance-billing",
+            isActive: true,
+        },
+        { label: "About Us", url: "/about-us", isActive: true },
+        { label: "Contact Us", url: "/contact", isActive: true },
+    ],
+    footerDescription:
+        "Board-certified emergency medical care available 24/7. We prioritize accuracy, speed, and patient comfort in every visit.",
+    footerColumns: [],
+    showStickyCTA: true,
+    stickyCallText: "Call Now",
+    stickyDirectionsText: "Get Directions",
+    globalSchema: null,
+    googleAnalyticsId: null,
+    socialLinks: [],
+    footerDisclaimer:
+        "The information on this website is for informational purposes only and does not constitute medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. In case of a medical emergency, call 911 immediately.",
 };
 
-const siteSettings = settings || defaultSettings;
-const { siteName, contactPhone, address, email, logo, footerLogo } =
-    siteSettings;
+// Merge settings: strip null/undefined from CMS so defaults survive
+const cleanSettings = settings
+    ? Object.fromEntries(Object.entries(settings).filter(([_, v]) => v != null))
+    : {};
+const siteSettings = { ...defaultSettings, ...cleanSettings };
+const {
+    siteName,
+    tagline,
+    contactPhone,
+    address,
+    email,
+    googleMapsUrl,
+    logo,
+    footerLogo,
+    headerLinks,
+    footerDescription,
+    footerColumns,
+    showStickyCTA,
+    stickyCallText,
+    stickyDirectionsText,
+    globalSchema,
+    socialLinks,
+    footerDisclaimer,
+    googleAnalyticsId,
+} = siteSettings;
+
+// Filter active header links
+const activeHeaderLinks = (headerLinks || []).filter(
+    (link: any) => link.isActive !== false,
+);
 
 // Format address for display
 const addressParts = address?.split(",") || [
     "10705 Northwest Hwy",
-    "Dallas, TX 75238",
+    "Dallas",
+    "TX 75238",
+    "United States",
 ];
+
+// Phone number (digits only)
+const phoneDigits = contactPhone?.replace(/[^0-9]/g, "");
+
+// Social Links (SameAs)
+const sameAsUrls = siteSettings.socialLinks?.map((link: any) => link.url) || [];
+
+// AUTO-GENERATED SCHEMA (EmergencyRoom)
+const autoSchema = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "EmergencyRoom",
+    "@id": `${Astro.url.origin}/#org`,
+    name: siteName,
+    url: Astro.url.origin,
+    logo: logo ? urlFor(logo).width(512).height(512).url() : undefined,
+    image: logo ? urlFor(logo).width(1200).height(630).url() : undefined,
+    description: tagline || "24/7 Emergency Care in White Rock, Dallas.",
+    sameAs: sameAsUrls.length > 0 ? sameAsUrls : undefined,
+    telephone: contactPhone,
+    email: email,
+    address: {
+        "@type": "PostalAddress",
+        streetAddress: addressParts[0] || "10705 Northwest Hwy",
+        addressLocality: "Dallas",
+        addressRegion: "TX",
+        postalCode: "75238",
+        addressCountry: "US",
+    },
+    // Google Map / Directions
+    hasMap: googleMapsUrl,
+    geo: {
+        "@type": "GeoCoordinates",
+        latitude: 32.86470362258898,
+        longitude: -96.69999270956976,
+    },
+    openingHoursSpecification: {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+        ],
+        opens: "00:00",
+        closes: "23:59",
+    },
+    medicalSpecialty: "EmergencyMedicine",
+    isAcceptingNewPatients: true,
+    priceRange: "$$",
+});
 ---
 
 <!doctype html>
@@ -38,8 +156,51 @@ const addressParts = address?.split(",") || [
         <meta charset="UTF-8" />
         <meta
             name="description"
-            content={`${siteName} - 24/7 Emergency Care`}
+            content={description || `${siteName} - 24/7 Emergency Care`}
         />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content={ogType} />
+        <meta property="og:url" content={Astro.url} />
+        <meta property="og:title" content={title} />
+        <meta
+            property="og:description"
+            content={description || `${siteName} - 24/7 Emergency Care`}
+        />
+        {
+            ogImage ? (
+                <meta property="og:image" content={ogImage} />
+            ) : logo ? (
+                <meta
+                    property="og:image"
+                    content={urlFor(logo).width(1200).height(630).url()}
+                />
+            ) : null
+        }
+        <meta property="og:site_name" content={siteName} />
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={Astro.url} />
+        <meta property="twitter:title" content={title} />
+        <meta
+            property="twitter:description"
+            content={description || `${siteName} - 24/7 Emergency Care`}
+        />
+        {
+            ogImage ? (
+                <meta property="twitter:image" content={ogImage} />
+            ) : logo ? (
+                <meta
+                    property="twitter:image"
+                    content={urlFor(logo).width(1200).height(630).url()}
+                />
+            ) : null
+        }
+
+        <!-- Canonical URL -->
+        <link rel="canonical" href={Astro.url.href} />
+
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />
@@ -56,6 +217,41 @@ const addressParts = address?.split(",") || [
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
             rel="stylesheet"
         />
+        <!-- Global JSON-LD Schema -->
+        <script type="application/ld+json" set:html={autoSchema} />
+        {
+            globalSchema && (
+                <script type="application/ld+json" set:html={globalSchema} />
+            )
+        }
+        <!-- Page-specific JSON-LD Schema -->
+        {
+            pageSchema && (
+                <script type="application/ld+json" set:html={pageSchema} />
+            )
+        }
+        <!-- Partytown / Google Analytics -->
+        {
+            googleAnalyticsId && (
+                <>
+                    <script
+                        type="text/partytown"
+                        src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}
+                    ></script>
+                    <script
+                        type="text/partytown"
+                        define:vars={{ googleAnalyticsId }}
+                    >
+                        window.dataLayer = window.dataLayer || [];
+                        window.gtag = function() {
+                            dataLayer.push(arguments);
+                        }
+                        window.gtag("js", new Date());
+                        window.gtag("config", googleAnalyticsId);
+                    </script>
+                </>
+            )
+        }
     </head>
     <body
         class="bg-background-light text-text-main font-display antialiased overflow-x-hidden selection:bg-primary selection:text-white"
@@ -92,40 +288,32 @@ const addressParts = address?.split(",") || [
                             <p
                                 class="text-[10px] font-bold tracking-[0.2em] uppercase text-text-muted mt-1"
                             >
-                                Emergency Care
+                                {tagline}
                             </p>
                         </div>
                     </a>
 
-                    <!-- Navigation -->
+                    <!-- Navigation (desktop only) -->
                     <nav class="hidden lg:flex items-center gap-6 xl:gap-8">
-                        <a
-                            class="text-[15px] font-semibold text-text-main hover:text-primary transition-colors whitespace-nowrap"
-                            href="#services">ER Services</a
-                        >
-                        <a
-                            class="text-[15px] font-semibold text-text-main hover:text-primary transition-colors whitespace-nowrap"
-                            href="#physicians">Our Physicians</a
-                        >
-                        <a
-                            class="text-[15px] font-semibold text-text-main hover:text-primary transition-colors whitespace-nowrap"
-                            href="#insurance">Ins. & Billing Info</a
-                        >
-                        <a
-                            class="text-[15px] font-semibold text-text-main hover:text-primary transition-colors whitespace-nowrap"
-                            href="#about">About Us</a
-                        >
-                        <a
-                            class="text-[15px] font-semibold text-text-main hover:text-primary transition-colors whitespace-nowrap"
-                            href="#contact">Contact Us</a
-                        >
+                        <ServicesMenu />
+                        {
+                            activeHeaderLinks.map((link: any) => (
+                                <a
+                                    class="text-[15px] font-semibold text-text-main hover:text-primary transition-colors whitespace-nowrap"
+                                    href={link.url}
+                                >
+                                    {link.label}
+                                </a>
+                            ))
+                        }
                     </nav>
 
-                    <!-- CTA -->
-                    <div class="flex items-center">
+                    <!-- Right side: CTA + Hamburger -->
+                    <div class="flex items-center gap-3">
+                        <!-- CTA Button (hidden on mobile) -->
                         <a
-                            href={`tel:${contactPhone?.replace(/[^0-9]/g, "")}`}
-                            class="flex items-center justify-center h-12 px-6 rounded-full bg-primary text-white text-sm font-bold shadow-lg shadow-primary/20 hover:bg-secondary hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+                            href={`tel:${phoneDigits}`}
+                            class="hidden md:flex items-center justify-center h-12 px-6 rounded-full bg-primary text-white text-sm font-bold shadow-lg shadow-primary/20 hover:bg-secondary hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
                         >
                             <span
                                 class="material-symbols-outlined text-[20px] mr-2"
@@ -133,175 +321,403 @@ const addressParts = address?.split(",") || [
                             >
                             <span class="whitespace-nowrap">Call Now</span>
                         </a>
+
+                        <!-- Hamburger Button (mobile/tablet only) -->
+                        <button
+                            id="hamburger-btn"
+                            class="lg:hidden flex items-center justify-center w-12 h-12 rounded-xl hover:bg-gray-100 transition-colors"
+                            aria-label="Open navigation menu"
+                            aria-expanded="false"
+                        >
+                            <span
+                                class="material-symbols-outlined text-3xl text-text-main"
+                                >menu</span
+                            >
+                        </button>
                     </div>
                 </div>
             </div>
         </header>
+    </body>
 
-        <!-- Main Content -->
-        <div class="pt-20 md:pt-24">
-            <slot />
+    <!-- Mobile Nav Drawer -->
+    <div
+        id="mobile-nav-overlay"
+        class="fixed inset-0 bg-black/50 z-[55] opacity-0 pointer-events-none transition-opacity duration-300"
+    >
+    </div>
+    <nav
+        id="mobile-nav-drawer"
+        class="fixed top-0 right-0 w-[300px] max-w-[85vw] h-full z-[60] bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-out flex flex-col"
+    >
+        <!-- Drawer Header -->
+        <div
+            class="flex items-center justify-between px-6 h-20 border-b border-gray-100"
+        >
+            <span class="text-lg font-bold text-primary">Menu</span>
+            <button
+                id="close-drawer-btn"
+                class="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 transition-colors"
+                aria-label="Close navigation menu"
+            >
+                <span class="material-symbols-outlined text-2xl text-text-main"
+                    >close</span
+                >
+            </button>
         </div>
 
-        <!-- Footer -->
-        <footer class="bg-primary text-white pt-24 pb-12">
-            <div class="max-w-[1280px] mx-auto px-6 lg:px-12">
-                <!-- CTA Section -->
-                <div
-                    class="flex flex-col lg:flex-row items-start justify-between gap-12 mb-20"
+        <!-- Nav Links -->
+        <div class="flex-1 overflow-y-auto py-4">
+            <a
+                href="/"
+                class="flex items-center gap-3 px-6 py-4 text-base font-semibold text-text-main hover:bg-primary/5 hover:text-primary transition-colors"
+            >
+                <span class="material-symbols-outlined text-xl">home</span>
+                Home
+            </a>
+            <a
+                href="/services"
+                class="flex items-center gap-3 px-6 py-4 text-base font-semibold text-text-main hover:bg-primary/5 hover:text-primary transition-colors"
+            >
+                <span class="material-symbols-outlined text-xl"
+                    >medical_services</span
                 >
-                    <div class="max-w-xl">
-                        <a class="flex items-center gap-4 group mb-8" href="/">
-                            {
-                                footerLogo ? (
-                                    <img
-                                        src={urlFor(footerLogo)
-                                            .width(200)
-                                            .url()}
-                                        alt={`${siteName} Logo`}
-                                        class="w-20 h-20 object-contain"
-                                    />
-                                ) : (
-                                    <img
-                                        src="/logo.png"
-                                        alt={`${siteName} Logo`}
-                                        class="w-20 h-20 object-contain brightness-0 invert"
-                                    />
-                                )
-                            }
-                            <div class="flex flex-col">
-                                <h1
-                                    class="text-3xl font-black tracking-tight text-white leading-none"
-                                >
-                                    {siteName}
-                                </h1>
-                                <p
-                                    class="text-[12px] font-bold tracking-[0.2em] uppercase text-blue-200 mt-2"
-                                >
-                                    Emergency Care
-                                </p>
-                            </div>
-                        </a>
-                        <p class="text-blue-100 text-xl leading-relaxed mb-8">
-                            Board-certified emergency medical care available
-                            24/7. We prioritize accuracy, speed, and patient
-                            comfort in every visit.
-                        </p>
-                        <a
-                            href={`tel:${contactPhone?.replace(/[^0-9]/g, "")}`}
-                            class="bg-accent text-white px-10 py-5 rounded-full font-bold text-lg shadow-xl shadow-accent/30 hover:bg-accent-hover transition-colors w-full sm:w-auto inline-flex items-center justify-center"
-                        >
-                            <span class="material-symbols-outlined mr-2"
-                                >call</span
-                            >
-                            Call {contactPhone}
-                        </a>
-                    </div>
-
-                    <!-- Footer Links -->
-                    <div
-                        class="grid grid-cols-2 md:grid-cols-3 gap-12 lg:gap-24 w-full lg:w-auto"
+                Services
+            </a>
+            {
+                activeHeaderLinks.map((link: any) => (
+                    <a
+                        href={link.url}
+                        class="flex items-center gap-3 px-6 py-4 text-base font-semibold text-text-main hover:bg-primary/5 hover:text-primary transition-colors"
                     >
-                        <div>
-                            <h4 class="font-bold text-lg mb-6 text-white">
-                                Services
-                            </h4>
-                            <ul class="space-y-4 text-blue-200">
-                                <li>
-                                    <a
-                                        class="hover:text-white transition-colors"
-                                        href="#services">Emergency Care</a
-                                    >
-                                </li>
-                                <li>
-                                    <a
-                                        class="hover:text-white transition-colors"
-                                        href="#services">Pediatrics</a
-                                    >
-                                </li>
-                                <li>
-                                    <a
-                                        class="hover:text-white transition-colors"
-                                        href="#services">Trauma</a
-                                    >
-                                </li>
-                                <li>
-                                    <a
-                                        class="hover:text-white transition-colors"
-                                        href="#services">Diagnostics</a
-                                    >
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg mb-6 text-white">
-                                Patient Info
-                            </h4>
-                            <ul class="space-y-4 text-blue-200">
-                                <li>
-                                    <a
-                                        class="hover:text-white transition-colors"
-                                        href="#insurance">Billing & Insurance</a
-                                    >
-                                </li>
-                                <li>
-                                    <a
-                                        class="hover:text-white transition-colors"
-                                        href="#">Patient Portal</a
-                                    >
-                                </li>
-                                <li>
-                                    <a
-                                        class="hover:text-white transition-colors"
-                                        href="#">Privacy Policy</a
-                                    >
-                                </li>
-                                <li>
-                                    <a
-                                        class="hover:text-white transition-colors"
-                                        href="#">Accessibility</a
-                                    >
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4
-                                class="font-bold text-lg mb-6 text-white text-left"
+                        <span class="material-symbols-outlined text-xl">
+                            {link.label === "About Us"
+                                ? "info"
+                                : link.label === "Contact Us"
+                                  ? "contact_mail"
+                                  : link.url?.includes("insurance")
+                                    ? "policy"
+                                    : link.url?.includes("physician")
+                                      ? "groups"
+                                      : "arrow_forward"}
+                        </span>
+                        {link.label}
+                    </a>
+                ))
+            }
+        </div>
+
+        <!-- Drawer Footer CTA -->
+        <div class="p-6 border-t border-gray-100">
+            <a
+                href={`tel:${phoneDigits}`}
+                class="flex items-center justify-center w-full py-4 rounded-full bg-primary text-white font-bold shadow-lg hover:bg-secondary transition-colors"
+            >
+                <span class="material-symbols-outlined mr-2">call</span>
+                Call {contactPhone}
+            </a>
+            <a
+                href={googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center justify-center w-full py-4 mt-3 rounded-full bg-accent text-white font-bold shadow-lg hover:bg-accent-hover transition-colors"
+            >
+                <span class="material-symbols-outlined mr-2">location_on</span>
+                Get Directions
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-20 md:pt-24">
+        <slot />
+    </div>
+
+    <!-- Footer -->
+    <footer id="site-footer" class="bg-primary text-white py-12 md:py-16">
+        <div class="max-w-[1280px] mx-auto px-6 lg:px-12">
+            <div
+                class="flex flex-col lg:flex-row items-start justify-between gap-12 lg:gap-24 mb-12"
+            >
+                <!-- Brand -->
+                <div class="shrink-0">
+                    <a class="flex items-center gap-4 group" href="/">
+                        {
+                            footerLogo ? (
+                                <img
+                                    src={urlFor(footerLogo).width(200).url()}
+                                    alt={`${siteName} Logo`}
+                                    class="w-16 h-16 object-contain"
+                                />
+                            ) : (
+                                <img
+                                    src="/logo.png"
+                                    alt={`${siteName} Logo`}
+                                    class="w-16 h-16 object-contain brightness-0 invert"
+                                />
+                            )
+                        }
+                        <div class="flex flex-col">
+                            <h1
+                                class="text-2xl md:text-3xl font-black tracking-tight text-white leading-none"
                             >
-                                Contact
-                            </h4>
-                            <ul
-                                class="space-y-4 text-blue-200 text-left list-none p-0"
+                                {siteName}
+                            </h1>
+                            <p
+                                class="text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase text-blue-200 mt-1 md:mt-2"
                             >
-                                {
-                                    addressParts.map((part: string) => (
-                                        <li>{part.trim()}</li>
-                                    ))
-                                }
-                                <li>{email}</li>
-                            </ul>
+                                {tagline}
+                            </p>
                         </div>
-                    </div>
+                    </a>
                 </div>
 
-                <!-- Copyright -->
+                <!-- Footer Link Columns (dynamic) -->
                 <div
-                    class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-blue-200/60"
+                    class="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 lg:gap-16 w-full lg:w-auto"
                 >
-                    <p>
-                        &copy; {new Date().getFullYear()}
-                        {siteName}. All rights reserved.
-                    </p>
-                    <div class="flex gap-6 mt-4 md:mt-0">
-                        <a class="hover:text-white transition-colors" href="#"
-                            >Privacy Policy</a
-                        >
-                        <a class="hover:text-white transition-colors" href="#"
-                            >Terms of Service</a
-                        >
-                    </div>
+                    {
+                        footerColumns && footerColumns.length > 0 ? (
+                            footerColumns.map((col: any) => (
+                                <div>
+                                    <h4 class="font-bold text-lg mb-4 md:mb-6 text-white">
+                                        {col.title}
+                                    </h4>
+                                    <ul class="space-y-3 md:space-y-4 text-blue-200">
+                                        {(col.links || [])
+                                            .filter(
+                                                (link: any) =>
+                                                    link.isActive !== false,
+                                            )
+                                            .map((link: any) => (
+                                                <li>
+                                                    <a
+                                                        class="hover:text-white transition-colors text-sm md:text-base"
+                                                        href={link.url}
+                                                    >
+                                                        {link.label}
+                                                    </a>
+                                                </li>
+                                            ))}
+                                    </ul>
+                                </div>
+                            ))
+                        ) : (
+                            /* Fallback: hardcoded footer columns if nothing set in CMS yet */
+                            <>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-4 md:mb-6 text-white">
+                                        Services
+                                    </h4>
+                                    <ul class="space-y-3 md:space-y-4 text-blue-200">
+                                        <li>
+                                            <a
+                                                class="hover:text-white transition-colors text-sm md:text-base"
+                                                href="#services"
+                                            >
+                                                Emergency Care
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                class="hover:text-white transition-colors text-sm md:text-base"
+                                                href="#services"
+                                            >
+                                                Pediatrics
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                class="hover:text-white transition-colors text-sm md:text-base"
+                                                href="#services"
+                                            >
+                                                Trauma
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                class="hover:text-white transition-colors text-sm md:text-base"
+                                                href="#services"
+                                            >
+                                                Diagnostics
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-4 md:mb-6 text-white">
+                                        Patient Info
+                                    </h4>
+                                    <ul class="space-y-3 md:space-y-4 text-blue-200">
+                                        <li>
+                                            <a
+                                                class="hover:text-white transition-colors text-sm md:text-base"
+                                                href="/about-us"
+                                            >
+                                                About Us
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                class="hover:text-white transition-colors text-sm md:text-base"
+                                                href="/contact"
+                                            >
+                                                Contact Us
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                class="hover:text-white transition-colors text-sm md:text-base"
+                                                href="/insurance-billing"
+                                            >
+                                                Billing & Insurance
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-4 md:mb-6 text-white text-left">
+                                        Contact
+                                    </h4>
+                                    <ul class="space-y-3 md:space-y-4 text-blue-200 text-left list-none p-0 text-sm md:text-base">
+                                        <li>10705 Northwest Hwy</li>
+                                        <li>Dallas, TX 75238</li>
+                                        <li>United States</li>
+                                        <li>{email}</li>
+                                    </ul>
+                                </div>
+                            </>
+                        )
+                    }
                 </div>
             </div>
-        </footer>
-    </body>
+
+            <!-- Disclaimer -->
+            <div class="border-t border-white/10 pt-8 mt-12 mb-8">
+                <p
+                    class="text-xs text-blue-200/50 leading-relaxed text-justify"
+                >
+                    {
+                        siteSettings.footerDisclaimer ||
+                            "The information on this website is for informational purposes only and does not constitute medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. In case of a medical emergency, call 911 immediately."
+                    }
+                </p>
+            </div>
+
+            <!-- Copyright -->
+            <div
+                class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs md:text-sm text-blue-200/60"
+            >
+                <p>
+                    &copy; {new Date().getFullYear()}
+                    {siteName}. All rights reserved.
+                </p>
+                <div class="flex gap-6 mt-4 md:mt-0">
+                    <a class="hover:text-white transition-colors" href="/privacy-policy"
+                        >Privacy Policy</a
+                    >
+                    <a class="hover:text-white transition-colors" href="/terms-of-service"
+                        >Terms of Service</a
+                    >
+                    <a class="hover:text-white transition-colors" href="/hipaa-notice"
+                        >HIPAA Notice</a
+                    >
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Sticky CTA (Mobile Only) — from Site Settings -->
+    {
+        showStickyCTA && !hideStickyCTA && (
+            <div
+                id="global-sticky-cta"
+                class="fixed bottom-0 left-0 w-full z-50 bg-white border-t border-gray-200 shadow-lg md:hidden transition-transform duration-300"
+            >
+                <div class="grid grid-cols-2 gap-0">
+                    <a
+                        href={`tel:${phoneDigits}`}
+                        class="flex items-center justify-center p-4 bg-primary text-white font-bold text-center hover:bg-primary-dark transition-colors"
+                    >
+                        <span class="material-symbols-outlined mr-2">call</span>
+                        {stickyCallText || "Call Now"}
+                    </a>
+                    <a
+                        href={googleMapsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center justify-center p-4 bg-accent text-white font-bold text-center hover:bg-accent-dark transition-colors"
+                    >
+                        <span class="material-symbols-outlined mr-2">
+                            location_on
+                        </span>
+                        {stickyDirectionsText || "Get Directions"}
+                    </a>
+                </div>
+            </div>
+        )
+    }
+
+    <!-- Mobile Nav & Sticky CTA Scripts -->
+    <script is:inline>
+        // Hamburger menu toggle
+        var hamburgerBtn = document.getElementById("hamburger-btn");
+        var closeDrawerBtn = document.getElementById("close-drawer-btn");
+        var overlay = document.getElementById("mobile-nav-overlay");
+        var drawer = document.getElementById("mobile-nav-drawer");
+
+        function openDrawer() {
+            if (!drawer || !overlay) return;
+            drawer.style.transform = "translateX(0)";
+            overlay.style.opacity = "1";
+            overlay.style.pointerEvents = "auto";
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeDrawer() {
+            if (!drawer || !overlay) return;
+            drawer.style.transform = "translateX(100%)";
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            document.body.style.overflow = "";
+        }
+
+        if (hamburgerBtn) hamburgerBtn.addEventListener("click", openDrawer);
+        if (closeDrawerBtn)
+            closeDrawerBtn.addEventListener("click", closeDrawer);
+        if (overlay) overlay.addEventListener("click", closeDrawer);
+
+        // Close drawer on link click
+        if (drawer) {
+            var links = drawer.querySelectorAll("a");
+            for (var i = 0; i < links.length; i++) {
+                links[i].addEventListener("click", closeDrawer);
+            }
+        }
+
+        // Close on Escape key
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") closeDrawer();
+        });
+
+        // Sticky CTA: hide when footer is visible
+        var stickyCTA = document.getElementById("global-sticky-cta");
+        var siteFooter = document.getElementById("site-footer");
+
+        if (stickyCTA && siteFooter) {
+            var observer = new IntersectionObserver(
+                function (entries) {
+                    for (var j = 0; j < entries.length; j++) {
+                        if (entries[j].isIntersecting) {
+                            stickyCTA.style.transform = "translateY(100%)";
+                        } else {
+                            stickyCTA.style.transform = "translateY(0)";
+                        }
+                    }
+                },
+                { threshold: 0, rootMargin: "0px" },
+            );
+            observer.observe(siteFooter);
+        }
+    </script>
 </html>

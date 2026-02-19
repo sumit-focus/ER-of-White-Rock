@@ -1,0 +1,80 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Hero from "../../components/sections/Hero.astro";
+import TrustBadges from "../../components/sections/TrustBadges.astro";
+import ServingAreas from "../../components/sections/ServingAreas.astro";
+import ServicesGrid from "../../components/sections/ServicesGrid.astro";
+import ComparisonTable from "../../components/sections/ComparisonTable.astro";
+import WhenToCome from "../../components/sections/WhenToCome.astro";
+import WhatToExpect from "../../components/sections/WhatToExpect.astro";
+import WhyChoose from "../../components/sections/WhyChoose.astro";
+import Physicians from "../../components/sections/Physicians.astro";
+import Testimonials from "../../components/sections/Testimonials.astro";
+import InsuranceBar from "../../components/sections/InsuranceBar.astro";
+import FAQ from "../../components/sections/FAQ.astro";
+import CTA from "../../components/sections/CTA.astro";
+import { getLandingPageBySlug } from "../../lib/sanity";
+
+export async function getStaticPaths() {
+    // In a real SSR world, we might not need this if using 'server' output,
+    // but if SSG or hybrid, we'd fetch all landing pages.
+    // Since this project seems to be SSR (fetching in frontmatter),
+    // we just rely on the dynamic route parameter [slug].
+    // If output is 'server', this export is not needed.
+    return [];
+}
+
+const { slug } = Astro.params;
+
+// Fetch the landing page data by slug
+const landingPage = await getLandingPageBySlug(slug as string).catch(
+    () => null,
+);
+
+// If no page found, 404
+if (!landingPage) {
+    return Astro.redirect("/404");
+}
+
+const { content, title: pageTitle, seo } = landingPage || {};
+
+// Helpers to extract section data
+const getSection = (type: string) =>
+    content?.find((s: any) => s._type === type);
+
+const fetchedHero = getSection("hero");
+const fetchedTrust = getSection("trustBadges");
+const fetchedServing = getSection("communitySection");
+const fetchedServices = getSection("servicesSection");
+const fetchedComparison = getSection("comparisonTable");
+const fetchedSymptom = getSection("whenToCome");
+const fetchedProcess = getSection("processSection");
+const fetchedWhyChoose = getSection("whyChooseSection");
+const fetchedPhysicians = getSection("physiciansSection");
+const fetchedTestimonials = getSection("testimonialsSection");
+const fetchedInsurance = getSection("insuranceBar");
+const fetchedFaq = getSection("faqSection");
+const fetchedCta = getSection("ctaSection");
+
+// Default Data Wrappers (Fallback to empty/defaults managed by components)
+// We mostly rely on the component's internal defaults if data is missing,
+// but passing specific fetched data when available.
+---
+
+<Layout title={seo?.metaTitle || pageTitle || `ER of White Rock - ${slug}`}>
+    <main>
+        {fetchedHero && <Hero data={fetchedHero} />}
+        {fetchedTrust && <TrustBadges data={fetchedTrust} />}
+        {fetchedServing && <ServingAreas data={fetchedServing} />}
+        {fetchedInsurance && <InsuranceBar data={fetchedInsurance} />}
+        {fetchedServices && <ServicesGrid data={fetchedServices} />}
+        {fetchedComparison && <ComparisonTable data={fetchedComparison} />}
+        {fetchedSymptom && <WhenToCome data={fetchedSymptom} />}
+        {fetchedProcess && <WhatToExpect data={fetchedProcess} />}
+        {fetchedWhyChoose && <WhyChoose data={fetchedWhyChoose} />}
+        {fetchedPhysicians && <Physicians data={fetchedPhysicians} />}
+        {fetchedTestimonials && <Testimonials data={fetchedTestimonials} />}
+        {fetchedFaq && <FAQ data={fetchedFaq} />}
+        {fetchedCta && <CTA data={fetchedCta} />}
+    </main>
+</Layout>

@@ -1,0 +1,68 @@
+---
+interface RelatedService {
+    title?: string;
+    slug?: { current: string };
+    description?: string;
+    icon?: string;
+}
+
+interface Props {
+    data: {
+        title?: string;
+        services?: RelatedService[];
+    };
+}
+
+const { data } = Astro.props;
+if (!data) return null;
+---
+
+<section class="py-16 lg:py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-6 lg:px-12">
+        {
+            data.title && (
+                <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-10 text-center">
+                    {data.title}
+                </h2>
+            )
+        }
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {
+                data.services?.map((s) => {
+                    const href = s.slug?.current
+                        ? `/services/${s.slug.current}`
+                        : "#";
+                    return (
+                        <a
+                            href={href}
+                            class="group block bg-gray-50 rounded-xl p-6 border border-gray-100 hover:border-primary/30 hover:shadow-md transition-all"
+                        >
+                            {s.icon && (
+                                <div class="w-12 h-12 rounded-lg bg-primary/10 group-hover:bg-primary/20 flex items-center justify-center mb-4 transition-colors">
+                                    <span class="material-symbols-outlined text-2xl text-primary">
+                                        {s.icon}
+                                    </span>
+                                </div>
+                            )}
+                            <h3 class="font-bold text-gray-900 text-lg mb-2 group-hover:text-primary transition-colors">
+                                {s.title || "Related Service"}
+                            </h3>
+                            {s.description && (
+                                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                                    {s.description}
+                                </p>
+                            )}
+                            <span class="inline-flex items-center gap-1 text-primary font-semibold text-sm mt-3">
+                                Learn more
+                                <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">
+                                    arrow_forward
+                                </span>
+                            </span>
+                        </a>
+                    );
+                })
+            }
+        </div>
+    </div>
+</section>

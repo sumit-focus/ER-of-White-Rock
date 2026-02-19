@@ -1,0 +1,193 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ServiceHero from "../../components/sections/ServiceHero.astro";
+// Import section components
+import WhenToCome from "../../components/sections/WhenToCome.astro";
+import WhyChoose from "../../components/sections/WhyChoose.astro";
+import Process from "../../components/sections/WhatToExpect.astro";
+import FAQ from "../../components/sections/FAQ.astro";
+import RichTextSection from "../../components/sections/RichTextSection.astro";
+import StickyCTA from "../../components/sections/StickyCTA.astro";
+import TrustBadges from "../../components/sections/TrustBadges.astro";
+import Testimonials from "../../components/sections/Testimonials.astro";
+import InsuranceBar from "../../components/sections/InsuranceBar.astro";
+import CTA from "../../components/sections/CTA.astro";
+import ServicesGrid from "../../components/sections/ServicesGrid.astro";
+import Physicians from "../../components/sections/Physicians.astro";
+import Community from "../../components/sections/Community.astro";
+import MapSection from "../../components/sections/MapSection.astro";
+import ComparisonSection from "../../components/sections/ComparisonSection.astro";
+// SEO Overhaul components
+import SymptomChecker from "../../components/sections/SymptomChecker.astro";
+import ConditionsTreated from "../../components/sections/ConditionsTreated.astro";
+import DiagnosticServices from "../../components/sections/DiagnosticServices.astro";
+import TreatmentApproach from "../../components/sections/TreatmentApproach.astro";
+import RelatedServices from "../../components/sections/RelatedServices.astro";
+
+import { sanityClient } from "sanity:client";
+
+export async function getStaticPaths() {
+    const services =
+        await sanityClient.fetch(`*[_type == "service" && defined(slug.current)] {
+    "params": { "slug": slug.current }
+  }`);
+    return services;
+}
+
+const { slug } = Astro.params;
+
+const query = `*[_type == "service" && slug.current == $slug][0] {
+  title,
+  "slug": slug.current,
+  metaDescription,
+  "medicalReviewer": medicalReviewer->{name, "title": jobTitle},
+  hero,
+  content[] {
+    ...,
+    _type,
+    "testimonials": testimonials[]->,
+    "faqs": faqs[]->,
+    "services": services[]->{title, "slug": slug, description, icon},
+    "physicians": physicians[]->
+  }
+}`;
+
+const service = await sanityClient.fetch(query, { slug });
+
+if (!service) return Astro.redirect("/404");
+
+const { title, metaDescription, medicalReviewer, hero, content } = service;
+
+// JSON-LD MedicalWebPage Schema
+const schema = {
+    "@context": "https://schema.org",
+    "@type": "MedicalWebPage",
+    name: title,
+    description:
+        metaDescription ||
+        `Emergency treatment for ${title} in Dallas/White Rock.`,
+    medicalAudience: "Patient",
+    healthCondition: title,
+    reviewedBy: medicalReviewer
+        ? {
+              "@type": "Person",
+              name: medicalReviewer.name,
+              jobTitle: medicalReviewer.title,
+          }
+        : undefined,
+    publisher: {
+        "@type": "MedicalOrganization",
+        name: "ER of White Rock",
+        location: {
+            "@type": "Place",
+            address: {
+                "@type": "PostalAddress",
+                addressLocality: "Dallas",
+                addressRegion: "TX",
+            },
+        },
+    },
+};
+
+// FAQPage JSON-LD (if FAQ section exists)
+const faqBlock = content?.find((b: any) => b._type === "faqSection");
+const faqSchema = faqBlock?.faqs?.length
+    ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqBlock.faqs.map((f: any) => ({
+              "@type": "Question",
+              name: f.question,
+              acceptedAnswer: {
+                  "@type": "Answer",
+                  text: f.answer,
+              },
+          })),
+      }
+    : null;
+---
+
+<Layout
+    title={`${title} | Emergency Room in White Rock, Dallas`}
+    description={metaDescription}
+    hideStickyCTA={content?.some((b: any) => b._type === "stickyCTA")}
+>
+    <!-- JSON-LD Injection -->
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    {
+        faqSchema && (
+            <script
+                type="application/ld+json"
+                set:html={JSON.stringify(faqSchema)}
+            />
+        )
+    }
+
+    <!-- Service Hero Section -->
+    {
+        hero && (
+            <ServiceHero
+                data={{ ...hero, headlineSuffix: "in White Rock, TX" }}
+                title={title}
+                medicalReviewer={medicalReviewer}
+            />
+        )
+    }
+
+    <!-- Dynamic Content Sections -->
+    {
+        content &&
+            content.map((block: any) => {
+                switch (block._type) {
+                    case "whenToCome":
+                        return <WhenToCome data={block} />;
+                    case "whyChooseSection":
+                        return <WhyChoose data={block} />;
+                    case "processSection":
+                        return <Process data={block} />;
+                    case "faqSection":
+                        return <FAQ data={block} />;
+                    case "richTextSection":
+                        return <RichTextSection data={block} />;
+                    case "stickyCTA":
+                        // Sticky CTA is fixed, so can be placed anywhere, but usually handled via Layout or at end
+                        // Rendering here ensures it's on the page. Component handles fixed positioning.
+                        return <StickyCTA {...block} />;
+                    case "insuranceBar":
+                        return <InsuranceBar data={block} />;
+                    case "trustBadges":
+                        return <TrustBadges data={block} />;
+                    case "comparisonTable":
+                        return <ComparisonSection data={block} />;
+                    case "testimonialsSection":
+                        return <Testimonials data={block} />;
+                    case "ctaSection":
+                        return <CTA data={block} />;
+                    case "servicesSection":
+                        return <ServicesGrid data={block} />;
+                    case "physiciansSection":
+                        return <Physicians data={block} />;
+                    case "communitySection":
+                        return <Community data={block} />;
+                    case "mapSection":
+                        return <MapSection data={block} />;
+                    // SEO Overhaul sections
+                    case "symptomCheckerSection":
+                        return <SymptomChecker data={block} />;
+                    case "conditionsTreatedSection":
+                        return <ConditionsTreated data={block} />;
+                    case "diagnosticSection":
+                        return <DiagnosticServices data={block} />;
+                    case "treatmentApproachSection":
+                        return <TreatmentApproach data={block} />;
+                    case "relatedServicesSection":
+                        return <RelatedServices data={block} />;
+                    default:
+                        return null;
+                }
+            })
+    }
+
+    <!-- Fallback or Standard Footer CTA if not in content -->
+    {!content?.some((b: any) => b._type === "ctaSection") && <CTA />}
+</Layout>

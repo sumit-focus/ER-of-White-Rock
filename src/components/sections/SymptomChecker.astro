@@ -1,0 +1,105 @@
+---
+interface Symptom {
+    symptom: string;
+    severity: "critical" | "urgent" | "monitor";
+    detail?: string;
+}
+
+interface Props {
+    data: {
+        title?: string;
+        description?: string;
+        symptoms?: Symptom[];
+    };
+}
+
+const { data } = Astro.props;
+if (!data) return null;
+
+const severityConfig: Record<
+    string,
+    { label: string; color: string; bg: string; border: string; icon: string }
+> = {
+    critical: {
+        label: "Call 911",
+        color: "text-red-700",
+        bg: "bg-red-50",
+        border: "border-red-200",
+        icon: "emergency",
+    },
+    urgent: {
+        label: "Visit ER Now",
+        color: "text-amber-700",
+        bg: "bg-amber-50",
+        border: "border-amber-200",
+        icon: "warning",
+    },
+    monitor: {
+        label: "Watch Closely",
+        color: "text-green-700",
+        bg: "bg-green-50",
+        border: "border-green-200",
+        icon: "visibility",
+    },
+};
+---
+
+<section class="py-16 lg:py-20 bg-white">
+    <div class="max-w-5xl mx-auto px-6 lg:px-12">
+        {
+            data.title && (
+                <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 text-center">
+                    {data.title}
+                </h2>
+            )
+        }
+        {
+            data.description && (
+                <p class="text-lg text-gray-600 mb-10 text-center max-w-3xl mx-auto">
+                    {data.description}
+                </p>
+            )
+        }
+
+        <div class="space-y-4">
+            {
+                data.symptoms?.map((s) => {
+                    const cfg =
+                        severityConfig[s.severity] || severityConfig.monitor;
+                    return (
+                        <div
+                            class={`flex items-start gap-4 p-5 rounded-xl border ${cfg.border} ${cfg.bg}`}
+                        >
+                            <span
+                                class={`material-symbols-outlined text-2xl mt-0.5 ${cfg.color}`}
+                            >
+                                {cfg.icon}
+                            </span>
+                            <div>
+                                <p class="font-semibold text-gray-900 text-lg">
+                                    {s.symptom}
+                                </p>
+                                {s.detail && (
+                                    <p class="text-gray-600 text-sm mt-1">
+                                        {s.detail}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    );
+                })
+            }
+        </div>
+
+        <!-- CTA -->
+        <div class="mt-10 text-center">
+            <a
+                href="tel:4699432939"
+                class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold px-8 py-4 rounded-full text-lg transition-colors shadow-lg"
+            >
+                <span class="material-symbols-outlined">call</span>
+                Call ER Now — 4699432939
+            </a>
+        </div>
+    </div>
+</section>

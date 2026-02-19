@@ -256,3 +256,260 @@ export const ctaSection = {
         { name: 'buttonLink', type: 'string', title: 'Button Link' }
     ]
 }
+
+export const stickyCTA = {
+    name: 'stickyCTA',
+    title: 'Sticky CTA (Mobile)',
+    type: 'object',
+    fields: [
+        { name: 'callNowText', type: 'string', title: 'Call Now Text', initialValue: 'Call Now' },
+        { name: 'callNowNumber', type: 'string', title: 'Phone Number' },
+        { name: 'directionsText', type: 'string', title: 'Directions Text', initialValue: 'Get Directions' },
+        { name: 'directionsLink', type: 'string', title: 'Google Maps Link' }
+    ]
+}
+
+export const richTextSection = {
+    name: 'richTextSection',
+    title: 'Rich Text / SEO Content',
+    type: 'object',
+    fields: [
+        { name: 'title', type: 'string', title: 'Section Title (Hidden or Visible)' },
+        {
+            name: 'content',
+            title: 'Content',
+            type: 'array',
+            of: [
+                {
+                    type: 'block',
+                    styles: [
+                        { title: 'Normal', value: 'normal' },
+                        { title: 'H2', value: 'h2' },
+                        { title: 'H3', value: 'h3' },
+                        { title: 'H4', value: 'h4' },
+                    ],
+                    lists: [{ title: 'Bullet', value: 'bullet' }, { title: 'Numbered', value: 'number' }],
+                    marks: {
+                        decorators: [{ title: 'Strong', value: 'strong' }, { title: 'Emphasis', value: 'em' }],
+                        annotations: [
+                            {
+                                name: 'link',
+                                type: 'object',
+                                title: 'Link',
+                                fields: [
+                                    {
+                                        name: 'href',
+                                        type: 'url',
+                                        title: 'URL',
+                                        validation: (Rule: any) => Rule.uri({
+                                            scheme: ['http', 'https', 'mailto', 'tel']
+                                        })
+                                    },
+                                    {
+                                        title: 'Open in new tab',
+                                        name: 'blank',
+                                        type: 'boolean'
+                                    },
+                                    {
+                                        title: 'Link Attribute (Rel)',
+                                        name: 'rel',
+                                        type: 'string',
+                                        options: {
+                                            list: [
+                                                { title: 'None', value: '' },
+                                                { title: 'Nofollow (SEO)', value: 'nofollow' },
+                                                { title: 'Sponsored', value: 'sponsored' },
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}
+
+export const mapSection = {
+    name: 'mapSection',
+    title: 'Map Section',
+    type: 'object',
+    fields: [
+        {
+            name: 'embedUrl',
+            title: 'Google Maps Embed URL',
+            type: 'string',
+            description: 'Full Google Maps embed URL'
+        }
+    ]
+}
+
+export const menuLink = {
+    name: 'menuLink',
+    title: 'Menu Link',
+    type: 'object',
+    fields: [
+        { name: 'label', title: 'Label', type: 'string', validation: (Rule: any) => Rule.required() },
+        { name: 'url', title: 'URL', type: 'string', validation: (Rule: any) => Rule.required() },
+        {
+            name: 'isActive',
+            title: 'Active',
+            type: 'boolean',
+            initialValue: true,
+            description: 'Toggle this link on/off'
+        }
+    ],
+    preview: {
+        select: { title: 'label', subtitle: 'url', active: 'isActive' },
+        prepare({ title, subtitle, active }: any) {
+            return { title: `${active === false ? '🚫 ' : ''}${title}`, subtitle }
+        }
+    }
+}
+
+export const footerColumn = {
+    name: 'footerColumn',
+    title: 'Footer Column',
+    type: 'object',
+    fields: [
+        { name: 'title', title: 'Column Title', type: 'string' },
+        {
+            name: 'links',
+            title: 'Links',
+            type: 'array',
+            of: [{ type: 'menuLink' }]
+        }
+    ]
+}
+
+export const symptomCheckerSection = {
+    name: 'symptomCheckerSection',
+    title: 'Symptom Checker',
+    type: 'object',
+    fields: [
+        { name: 'title', type: 'string', title: 'Section Title' },
+        { name: 'description', type: 'text', title: 'Intro Text', rows: 3 },
+        {
+            name: 'symptoms',
+            title: 'Symptoms',
+            type: 'array',
+            of: [{
+                type: 'object',
+                fields: [
+                    { name: 'symptom', type: 'string', title: 'Symptom' },
+                    {
+                        name: 'severity',
+                        type: 'string',
+                        title: 'Severity',
+                        options: {
+                            list: [
+                                { title: 'Critical — Call 911', value: 'critical' },
+                                { title: 'Urgent — Visit ER Now', value: 'urgent' },
+                                { title: 'Monitor — Watch Closely', value: 'monitor' }
+                            ]
+                        }
+                    },
+                    { name: 'detail', type: 'text', title: 'Detail / Explanation', rows: 2 }
+                ],
+                preview: {
+                    select: { title: 'symptom', subtitle: 'severity' }
+                }
+            }]
+        }
+    ]
+}
+
+export const conditionsTreatedSection = {
+    name: 'conditionsTreatedSection',
+    title: 'Conditions Treated',
+    type: 'object',
+    fields: [
+        { name: 'title', type: 'string', title: 'Section Title' },
+        { name: 'description', type: 'text', title: 'Intro Text', rows: 3 },
+        {
+            name: 'conditions',
+            title: 'Conditions',
+            type: 'array',
+            of: [{
+                type: 'object',
+                fields: [
+                    { name: 'name', type: 'string', title: 'Condition Name' },
+                    { name: 'description', type: 'text', title: 'Short Description', rows: 2 },
+                    { name: 'icon', type: 'string', title: 'Icon (Material Symbol)' }
+                ],
+                preview: {
+                    select: { title: 'name' }
+                }
+            }]
+        }
+    ]
+}
+
+export const diagnosticSection = {
+    name: 'diagnosticSection',
+    title: 'Diagnostic Services',
+    type: 'object',
+    fields: [
+        { name: 'title', type: 'string', title: 'Section Title' },
+        { name: 'description', type: 'text', title: 'Intro Text', rows: 3 },
+        {
+            name: 'diagnostics',
+            title: 'Diagnostics',
+            type: 'array',
+            of: [{
+                type: 'object',
+                fields: [
+                    { name: 'name', type: 'string', title: 'Diagnostic Name' },
+                    { name: 'description', type: 'text', title: 'Description', rows: 2 },
+                    { name: 'icon', type: 'string', title: 'Icon (Material Symbol)' }
+                ],
+                preview: {
+                    select: { title: 'name' }
+                }
+            }]
+        }
+    ]
+}
+
+export const treatmentApproachSection = {
+    name: 'treatmentApproachSection',
+    title: 'Treatment Approach',
+    type: 'object',
+    fields: [
+        { name: 'title', type: 'string', title: 'Section Title' },
+        { name: 'description', type: 'text', title: 'Intro Text', rows: 3 },
+        {
+            name: 'approaches',
+            title: 'Treatment Steps',
+            type: 'array',
+            of: [{
+                type: 'object',
+                fields: [
+                    { name: 'title', type: 'string', title: 'Step Title' },
+                    { name: 'description', type: 'text', title: 'Description', rows: 3 },
+                    { name: 'icon', type: 'string', title: 'Icon (Material Symbol)' }
+                ],
+                preview: {
+                    select: { title: 'title' }
+                }
+            }]
+        }
+    ]
+}
+
+export const relatedServicesSection = {
+    name: 'relatedServicesSection',
+    title: 'Related Services',
+    type: 'object',
+    fields: [
+        { name: 'title', type: 'string', title: 'Section Title' },
+        {
+            name: 'services',
+            title: 'Related Services',
+            type: 'array',
+            of: [{ type: 'reference', to: [{ type: 'service' }] }]
+        }
+    ]
+}

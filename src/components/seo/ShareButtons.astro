@@ -1,0 +1,56 @@
+---
+export interface Props {
+    url: string;
+    title: string;
+}
+
+const { url, title } = Astro.props;
+const encodedUrl = encodeURIComponent(url);
+const encodedTitle = encodeURIComponent(title);
+
+const links = [
+    {
+        name: "Facebook",
+        href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+        icon: "facebook",
+        color: "bg-[#1877F2] hover:bg-[#166fe5]",
+    },
+    {
+        name: "Twitter",
+        href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
+        icon: "close", // X logo is close to 'close' or we use custom svg. Using 'close' as placeholder for X or standard material 'post'
+        color: "bg-black hover:bg-gray-800",
+    },
+    {
+        name: "LinkedIn",
+        href: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}`,
+        icon: "work", // Placeholder for LinkedIn
+        color: "bg-[#0A66C2] hover:bg-[#0958a8]",
+    },
+    {
+        name: "Email",
+        href: `mailto:?subject=${encodedTitle}&body=Check out this article: ${encodedUrl}`,
+        icon: "mail",
+        color: "bg-gray-600 hover:bg-gray-700",
+    },
+];
+---
+
+<div class="flex flex-wrap gap-2">
+    {
+        links.map((link) => (
+            <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class={`flex items-center justify-center w-10 h-10 rounded-full text-white transition-all transform hover:-translate-y-1 shadow-sm ${link.color}`}
+                aria-label={`Share on ${link.name}`}
+            >
+                {/* Using simple text for now if icons aren't perfect, or material symbols */}
+                <span class="material-symbols-outlined text-lg">
+                    {link.icon}
+                </span>
+            </a>
+        ))
+    }
+</div>

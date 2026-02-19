@@ -1,0 +1,103 @@
+---
+import { PortableText } from "astro-portabletext";
+const { data } = Astro.props;
+
+if (!data) return null;
+const { title, content } = data;
+---
+
+<section class="py-16 md:py-24 bg-white">
+    <div class="max-w-[800px] mx-auto px-6">
+        {
+            title && (
+                <h2 class="text-3xl md:text-4xl font-bold text-text-main mb-10 text-center">
+                    {title}
+                </h2>
+            )
+        }
+        <div class="rich-text-content">
+            <PortableText value={content} />
+        </div>
+    </div>
+</section>
+
+<style>
+    .rich-text-content {
+        color: #666666;
+        font-size: 1.125rem;
+        line-height: 1.8;
+    }
+
+    .rich-text-content :global(h2) {
+        color: #1a1a1a;
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+    }
+
+    .rich-text-content :global(h3) {
+        color: #1a1a1a;
+        font-size: 1.375rem;
+        font-weight: 700;
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
+        line-height: 1.4;
+    }
+
+    .rich-text-content :global(h4) {
+        color: #1a1a1a;
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .rich-text-content :global(p) {
+        margin-bottom: 1.25rem;
+    }
+
+    .rich-text-content :global(p:last-child) {
+        margin-bottom: 0;
+    }
+
+    .rich-text-content :global(ul),
+    .rich-text-content :global(ol) {
+        margin-top: 0.75rem;
+        margin-bottom: 1.25rem;
+        padding-left: 1.5rem;
+    }
+
+    .rich-text-content :global(li) {
+        margin-bottom: 0.5rem;
+    }
+
+    .rich-text-content :global(a) {
+        color: #11458f;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    .rich-text-content :global(a:hover) {
+        color: #da1212;
+    }
+
+    .rich-text-content :global(strong) {
+        color: #1a1a1a;
+        font-weight: 700;
+    }
+
+    .rich-text-content :global(blockquote) {
+        border-left: 4px solid #11458f;
+        padding-left: 1.25rem;
+        margin: 1.5rem 0;
+        font-style: italic;
+        color: #444;
+    }
+
+    /* First heading at top should have no extra top margin */
+    .rich-text-content :global(> :first-child) {
+        margin-top: 0;
+    }
+</style>

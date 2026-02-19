@@ -1,0 +1,150 @@
+---
+const { data } = Astro.props;
+---
+
+<section class="py-16 md:py-24 bg-white">
+    <div class="max-w-[1280px] mx-auto px-6 lg:px-12">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2
+                class="text-accent text-sm font-bold tracking-widest uppercase mb-3"
+            >
+                Make the Right Choice
+            </h2>
+            <h3
+                class="text-3xl md:text-4xl font-bold text-text-main tracking-tight"
+            >
+                ER vs. Urgent Care for This Condition
+            </h3>
+            <p class="mt-4 text-text-muted text-lg">
+                Knowing where to go can save your life. For severe symptoms,
+                always choose the ER.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 md:gap-12 max-w-5xl mx-auto">
+            <!-- Urgent Care Column -->
+            <div
+                class="bg-gray-50 rounded-3xl p-8 border border-gray-100 flex flex-col"
+            >
+                <div class="flex items-center gap-4 mb-6">
+                    <div
+                        class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-500"
+                    >
+                        <span class="material-symbols-outlined text-2xl"
+                            >local_clinic</span
+                        >
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-700">Urgent Care</h4>
+                </div>
+                <ul class="space-y-4 flex-1">
+                    <li class="flex items-start gap-3 text-gray-600">
+                        <span
+                            class="material-symbols-outlined text-red-400 mt-1"
+                            >close</span
+                        >
+                        <span>Limited diagnostic tools (basic X-ray only)</span>
+                    </li>
+                    <li class="flex items-start gap-3 text-gray-600">
+                        <span
+                            class="material-symbols-outlined text-red-400 mt-1"
+                            >close</span
+                        >
+                        <span>No CT Scan or Ultrasound</span>
+                    </li>
+                    <li class="flex items-start gap-3 text-gray-600">
+                        <span
+                            class="material-symbols-outlined text-red-400 mt-1"
+                            >close</span
+                        >
+                        <span
+                            >Mid-level providers (Nurse Practitioners) usually
+                            on staff</span
+                        >
+                    </li>
+                    <li class="flex items-start gap-3 text-gray-600">
+                        <span
+                            class="material-symbols-outlined text-red-400 mt-1"
+                            >close</span
+                        >
+                        <span>Cannot treat life-threatening conditions</span>
+                    </li>
+                </ul>
+                <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+                    <p
+                        class="text-sm font-bold text-gray-400 uppercase tracking-wider"
+                    >
+                        Best for
+                    </p>
+                    <p class="text-gray-600 mt-1">
+                        Minor colds, flu, small cuts
+                    </p>
+                </div>
+            </div>
+
+            <!-- ER Column -->
+            <div
+                class="bg-primary text-white rounded-3xl p-8 shadow-xl shadow-primary/20 flex flex-col transform md:-translate-y-4 relative overflow-hidden"
+            >
+                <div
+                    class="absolute top-4 right-4 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full z-20 shadow-lg"
+                >
+                    RECOMMENDED
+                </div>
+                <div class="absolute top-0 right-0 p-8 opacity-10">
+                    <span class="material-symbols-outlined text-9xl"
+                        >emergency</span
+                    >
+                </div>
+
+                <div class="relative z-10 flex items-center gap-4 mb-6">
+                    <div
+                        class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white"
+                    >
+                        <span class="material-symbols-outlined text-2xl"
+                            >emergency</span
+                        >
+                    </div>
+                    <h4 class="text-xl font-bold">ER of White Rock</h4>
+                </div>
+                <ul class="space-y-4 flex-1 relative z-10">
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-accent mt-1"
+                            >check_circle</span
+                        >
+                        <span>Full on-site Laboratory (Results in mins)</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-accent mt-1"
+                            >check_circle</span
+                        >
+                        <span>CT Scan, Ultrasound, & Digital X-Ray</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-accent mt-1"
+                            >check_circle</span
+                        >
+                        <span>Board-Certified ER Physicians 24/7</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-accent mt-1"
+                            >check_circle</span
+                        >
+                        <span>Equipped for Heart Attack, Stroke, & Trauma</span>
+                    </li>
+                </ul>
+                <div
+                    class="mt-8 pt-6 border-t border-white/20 text-center relative z-10"
+                >
+                    <p
+                        class="text-sm font-bold text-white/60 uppercase tracking-wider"
+                    >
+                        Best for
+                    </p>
+                    <p class="text-white mt-1 font-bold text-lg">
+                        Severe Pain, Chest Pain, Breathing Issues, Trauma
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

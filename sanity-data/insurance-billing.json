@@ -1,0 +1,120 @@
+{
+    "_id": "insurancePage",
+    "_type": "insurancePage",
+    "title": "Insurance & Billing",
+    "seo": {
+        "metaTitle": "Insurance & Billing | ER of White Rock",
+        "metaDescription": "Learn about insurance plans accepted at ER of White Rock, billing transparency, and payment options. We accept most major insurance plans."
+    },
+    "hero": {
+        "title": "Insurance & Billing Information",
+        "subtitle": "Clear, transparent billing with no surprises."
+    },
+    "facilityNotice": [
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "HB 2041 Facility Notice: ER of White Rock operates as a freestanding emergency medical care facility.",
+                    "marks": [
+                        "strong"
+                    ]
+                }
+            ]
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Our fees are comparable to hospital emergency departments and may include a facility fee. ER of White Rock and its medical providers may not participate in your health plan’s network. Physicians who treat you may bill separately from the facility. Our emergency center is currently classified as out-of-network for all health benefit plans."
+                }
+            ]
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Open Professional Fee Master",
+                    "marks": [
+                        "em"
+                    ]
+                }
+            ]
+        },
+        {
+            "_type": "block",
+            "children": [
+                {
+                    "_type": "span",
+                    "text": "Advanced CT and Ultrasound scanner for Blood Clot Treatment diagnostics"
+                }
+            ]
+        }
+    ],
+    "acceptedInsurance": {
+        "title": "Insurance Plans We Accept",
+        "providers": [
+            "Aetna",
+            "Humana",
+            "Kaiser Permanente",
+            "Centene",
+            "Most PPO Plans",
+            "Blue Cross Blue Shield",
+            "United Healthcare",
+            "Molina Healthcare",
+            "Workers’ Compensation",
+            "Most HMO Plans",
+            "Cigna",
+            "Anthem",
+            "WellCare",
+            "Auto Insurance Claims"
+        ]
+    },
+    "governmentInsurance": {
+        "title": "Government Insurance",
+        "content": [
+            {
+                "_type": "block",
+                "children": [
+                    {
+                        "_type": "span",
+                        "text": "One thing we should mention—federal rules don’t let freestanding ERs like ours accept Medicare, Medicaid, CHIP, Tricare, or VA coverage. It’s not ideal, We know. But please hear this: in a life-threatening emergency, we will always treat you. Period. No one is ever turned away."
+                    }
+                ]
+            }
+        ]
+    },
+    "exclusiveDiscounts": {
+        "title": "Exclusive Discounts",
+        "discounts": [
+            "Police Officers",
+            "Firefighters",
+            "Active Duty Military & Veterans",
+            "Senior Citizens (65+)"
+        ],
+        "note": "Bring your ID or proof of service to receive a discount on your visit."
+    },
+    "balanceBilling": {
+        "title": "No Balance Billing – Our Commitment to Financial Transparency",
+        "content": [
+            {
+                "_type": "block",
+                "children": [
+                    {
+                        "_type": "span",
+                        "text": "At ER of White Rock, we believe you should never have to worry about surprise charges. That’s why we do not balance bill our patients. You’ll always know what to expect with your bill—clear, upfront, and without hidden fees. For patients who may need extra support, payment plans are available to make care more manageable. Your health is the priority, and we work hard to keep the financial side simple and stress-free."
+                    }
+                ]
+            }
+        ]
+    },
+    "contactInfo": {
+        "title": "How to Verify Insurance & Discounts",
+        "description": "Before your visit, please call us to confirm your insurance coverage or discount eligibility.",
+        "email": "info@erofwhiterock.com",
+        "footerText": "Our team is here to walk you through coverage, co-pays, and discount eligibility so you feel confident in your care."
+    }
+}

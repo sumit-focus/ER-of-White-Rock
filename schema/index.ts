@@ -8,22 +8,34 @@ import landingPage from './landingPage';
 import {
     trustBadges, insuranceBar, aboutSection, physiciansSection,
     servicesSection, comparisonTable, whenToCome, processSection,
-    testimonialsSection, communitySection, faqSection, ctaSection, whyChooseSection
+    testimonialsSection, communitySection, faqSection, ctaSection, whyChooseSection,
+    richTextSection, stickyCTA, mapSection, menuLink, footerColumn,
+    symptomCheckerSection, conditionsTreatedSection, diagnosticSection,
+    treatmentApproachSection, relatedServicesSection
 } from './sections';
+
+import author from './author';
+import category from './category';
+import post from './post';
 
 export const schemaTypes = [
     // Documents
     landingPage,
+    insurancePage,
+    contactPage,
+    aboutPage,
     hero,
     service,
     settings,
     physician,
     testimonial,
     faq,
+    post,
+    author,
+    category,
     // Objects
     trustBadges,
     insuranceBar,
-    aboutSection,
     physiciansSection,
     servicesSection,
     comparisonTable,
@@ -33,5 +45,15 @@ export const schemaTypes = [
     communitySection,
     faqSection,
     ctaSection,
-    whyChooseSection
+    whyChooseSection,
+    richTextSection,
+    stickyCTA,
+    mapSection,
+    menuLink,
+    footerColumn,
+    symptomCheckerSection,
+    conditionsTreatedSection,
+    diagnosticSection,
+    treatmentApproachSection,
+    relatedServicesSection
 ];

@@ -1,0 +1,52 @@
+---
+import { urlFor } from "../../lib/sanity";
+import { sanityClient } from "sanity:client";
+
+// Fetch all services
+const services =
+    await sanityClient.fetch(`*[_type == "service" && defined(slug.current) && !(_id in path("drafts.**"))] | order(title asc) {
+  title,
+  "slug": slug.current,
+  icon
+}`);
+---
+
+<div class="group relative">
+    <a
+        href="/services"
+        class="flex items-center gap-1 text-[15px] font-semibold text-text-main hover:text-primary transition-colors py-4"
+    >
+        ER Services
+        <span class="material-symbols-outlined text-sm">expand_more</span>
+    </a>
+
+    <!-- Mega Menu Dropdown -->
+    <div
+        class="absolute left-1/2 -translate-x-1/2 top-full w-[800px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-out transform translate-y-2 group-hover:translate-y-0 z-50 pt-4"
+    >
+        <div
+            class="bg-white rounded-xl shadow-xl border border-gray-100 p-8 grid grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-8"
+        >
+            {
+                services.map((service: any) => (
+                    <a
+                        href={`/services/${service.slug}`}
+                        class="flex items-center gap-3 group/item hover:bg-gray-50 p-2 rounded-lg -mx-2 transition-colors"
+                    >
+                        <span class="material-symbols-outlined text-primary group-hover/item:text-accent transition-colors">
+                            {service.icon || "medical_services"}
+                        </span>
+                        <span class="text-sm font-medium text-text-secondary group-hover/item:text-primary transition-colors">
+                            {service.title}
+                        </span>
+                    </a>
+                ))
+            }
+        </div>
+        <!-- Decorative arrow -->
+        <div
+            class="absolute top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-t border-l border-gray-100"
+        >
+        </div>
+    </div>
+</div>

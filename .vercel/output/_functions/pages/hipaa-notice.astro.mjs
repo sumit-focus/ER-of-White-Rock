@@ -1,0 +1,103 @@
+import '../chunks/page-ssr_CmsWzWBj.mjs';
+import { f as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_D23ZCGoD.mjs';
+import 'piccolore';
+import { $ as $$Layout } from '../chunks/Layout_DAOamDnX.mjs';
+export { renderers } from '../renderers.mjs';
+
+const $$HipaaNotice = createComponent(($$result, $$props, $$slots) => {
+  const title = "Notice of Privacy Practices (HIPAA) | ER of White Rock";
+  const description = "HIPAA Notice of Privacy Practices for ER of White Rock regarding your medical information.";
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": title, "description": description }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<section class="py-20 bg-gray-50"> <div class="max-w-4xl mx-auto px-6 lg:px-12"> <h1 class="text-3xl md:text-5xl font-black text-primary mb-2">
+Notice of Privacy Practices
+</h1> <p class="text-xl text-accent font-bold mb-8">
+This notice describes how medical information about you may be
+                used and disclosed and how you can get access to this
+                information. Please review it carefully.
+</p> <p class="text-text-muted mb-12">
+Last Updated: ${(/* @__PURE__ */ new Date()).toLocaleDateString()} </p> <div class="prose prose-lg text-text-muted max-w-none bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100"> <h2>Your Rights</h2> <p>
+When it comes to your health information, you have certain
+                    rights. This section explains your rights and some of our
+                    responsibilities to help you.
+</p> <ul> <li> <strong>Get an electronic or paper copy of your medical
+                            record:</strong> You can ask to see or get an electronic or paper copy of
+                        your medical record and other health information we have about
+                        you.
+</li> <li> <strong>Ask us to correct your medical record:</strong> You
+                        can ask us to correct health information about you that you
+                        think is incorrect or incomplete.
+</li> <li> <strong>Request confidential communications:</strong> You
+                        can ask us to contact you in a specific way (for example,
+                        home or office phone) or to send mail to a different address.
+</li> <li> <strong>Ask us to limit what we use or share:</strong> You
+                        can ask us not to use or share certain health information
+                        for treatment, payment, or our operations. We are not required
+                        to agree to your request, and we may say "no" if it would
+                        affect your care.
+</li> <li> <strong>Get a list of those with whom we've shared
+                            information:</strong> You can ask for a list (accounting) of the times we've shared
+                        your health information for six years prior to the date you
+                        ask, who we shared it with, and why.
+</li> <li> <strong>Get a copy of this privacy notice:</strong> You can
+                        ask for a paper copy of this notice at any time, even if you
+                        have agreed to receive the notice electronically.
+</li> <li> <strong>Choose someone to act for you:</strong> If you have
+                        given someone medical power of attorney or if someone is your
+                        legal guardian, that person can exercise your rights and make
+                        choices about your health information.
+</li> <li> <strong>File a complaint if you feel your rights are
+                            violated:</strong> You can complain if you feel we have violated your rights
+                        by contacting us. We will not retaliate against you for filing
+                        a complaint.
+</li> </ul> <h2>Your Choices</h2> <p>
+For certain health information, you can tell us your choices
+                    about what we share. If you have a clear preference for how
+                    we share your information in the situations described below,
+                    talk to us. Tell us what you want us to do, and we will
+                    follow your instructions.
+</p> <ul> <li>
+Share information with your family, close friends, or
+                        others involved in your care
+</li> <li>Share information in a disaster relief situation</li> <li>Include your information in a hospital directory</li> </ul> <h2>Our Uses and Disclosures</h2> <p>
+How do we typically use or share your health information? We
+                    typically use or share your health information in the
+                    following ways:
+</p> <ul> <li> <strong>Treat you:</strong> We can use your health information
+                        and share it with other professionals who are treating you.
+</li> <li> <strong>Run our organization:</strong> We can use and share
+                        your health information to run our practice, improve your
+                        care, and contact you when necessary.
+</li> <li> <strong>Bill for your services:</strong> We can use and share
+                        your health information to bill and get payment from health
+                        plans or other entities.
+</li> <li> <strong>Help with public health and safety issues:</strong> We can share health information about you for certain situations
+                        such as preventing disease, helping with product recalls,
+                        reporting adverse reactions to medications, noting suspected
+                        abuse, neglect, or domestic violence, and preventing or reducing
+                        a serious threat to anyone's health or safety.
+</li> <li> <strong>Comply with the law:</strong> We will share information
+                        about you if state or federal laws require it, including with
+                        the Department of Health and Human Services if it wants to
+                        see that we're complying with federal privacy law.
+</li> </ul> <h2>Contact Information</h2> <p>
+For more information about our privacy practices, please
+                    contact our Privacy Officer:
+</p> <p> <strong>ER of White Rock</strong><br>
+10705 Northwest Hwy<br>
+Dallas, TX 75238<br>
+4699432939
+</p> </div> </div> </section> ` })}`;
+}, "C:/Users/sumit/OneDrive/Desktop/ER of White Rock/src/pages/hipaa-notice.astro", void 0);
+
+const $$file = "C:/Users/sumit/OneDrive/Desktop/ER of White Rock/src/pages/hipaa-notice.astro";
+const $$url = "/hipaa-notice";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    __proto__: null,
+    default: $$HipaaNotice,
+    file: $$file,
+    url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };
