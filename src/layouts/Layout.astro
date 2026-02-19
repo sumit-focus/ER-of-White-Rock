@@ -22,7 +22,10 @@ const {
 } = Astro.props;
 
 // Fetch Site Settings
-const settings = await getSettings().catch(() => null);
+const settings = await getSettings().catch((err) => {
+    console.error("Error fetching site settings:", err);
+    return null;
+});
 
 // Default Settings
 const defaultSettings = {

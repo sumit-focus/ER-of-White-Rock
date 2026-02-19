@@ -4,13 +4,23 @@ export async function GET() {
     const siteUrl = import.meta.env.SITE || "https://erwhiterock.com"; // Fallback URL
 
     // Fetch all dynamic pages
-    const services = await sanityClient.fetch(
-        `*[_type == "service" && defined(slug.current)] { "slug": slug.current, _updatedAt }`
-    );
+    let services = [];
+    try {
+        services = await sanityClient.fetch(
+            `*[_type == "service" && defined(slug.current)] { "slug": slug.current, _updatedAt }`
+        );
+    } catch (error) {
+        console.error("Error fetching services for sitemap:", error);
+    }
 
-    const locations = await sanityClient.fetch(
-        `*[_type == "landingPage" && defined(slug.current) && slug.current != "home"] { "slug": slug.current, _updatedAt }`
-    );
+    let locations = [];
+    try {
+        locations = await sanityClient.fetch(
+            `*[_type == "landingPage" && defined(slug.current) && slug.current != "home"] { "slug": slug.current, _updatedAt }`
+        );
+    } catch (error) {
+        console.error("Error fetching locations for sitemap:", error);
+    }
 
     // Static pages with their intended priorities
     const staticPages = [
