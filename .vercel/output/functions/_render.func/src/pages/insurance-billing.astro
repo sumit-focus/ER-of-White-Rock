@@ -1,14 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { sanityClient } from "sanity:client";
+import { client, urlFor } from "../lib/sanity";
 import { PortableText } from "astro-portabletext";
 import InsuranceBar from "../components/sections/InsuranceBar.astro";
 
-// Import urlFor helper
-import { urlFor } from "../lib/sanity";
-
 // Update query to fetch file URL
-const insurancePage = await sanityClient.fetch(
+const insurancePage = await client.fetch(
     `*[_type == "insurancePage"][0]{
         ...,
         "feeMasterPdfUrl": feeMasterPdf.asset->url

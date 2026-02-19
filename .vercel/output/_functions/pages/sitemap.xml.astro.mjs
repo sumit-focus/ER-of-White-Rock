@@ -1,14 +1,24 @@
-import { s as sanityClient } from '../chunks/_sanity_client_JiifF4TX.mjs';
+import { c as client } from '../chunks/sanity_Cpxq_s79.mjs';
 export { renderers } from '../renderers.mjs';
 
 async function GET() {
   const siteUrl = "https://erofwhiterock.com";
-  const services = await sanityClient.fetch(
-    `*[_type == "service" && defined(slug.current)] { "slug": slug.current, _updatedAt }`
-  );
-  const locations = await sanityClient.fetch(
-    `*[_type == "landingPage" && defined(slug.current) && slug.current != "home"] { "slug": slug.current, _updatedAt }`
-  );
+  let services = [];
+  try {
+    services = await client.fetch(
+      `*[_type == "service" && defined(slug.current)] { "slug": slug.current, _updatedAt }`
+    );
+  } catch (error) {
+    console.error("Error fetching services for sitemap:", error);
+  }
+  let locations = [];
+  try {
+    locations = await client.fetch(
+      `*[_type == "landingPage" && defined(slug.current) && slug.current != "home"] { "slug": slug.current, _updatedAt }`
+    );
+  } catch (error) {
+    console.error("Error fetching locations for sitemap:", error);
+  }
   const staticPages = [
     { url: "", changefreq: "daily", priority: 1 },
     { url: "about-us", changefreq: "monthly", priority: 0.8 },

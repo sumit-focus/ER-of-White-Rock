@@ -1,11 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { sanityClient } from "sanity:client";
+
+import { client, urlFor } from "../lib/sanity";
 import { PortableText } from "astro-portabletext";
-import { urlFor } from "../lib/sanity";
 
 // Fetch About Page Data
-const aboutPage = await sanityClient.fetch(
+const aboutPage = await client.fetch(
     `*[_type == "aboutPage"][0]{
         ...,
         facility {

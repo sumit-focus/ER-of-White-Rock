@@ -1,15 +1,15 @@
-import '../../chunks/page-ssr_CmsWzWBj.mjs';
+import '../../chunks/page-ssr_BG6rDwkd.mjs';
 import { e as createAstro, f as createComponent, m as maybeRenderHead, r as renderTemplate, k as renderComponent, h as addAttribute, u as unescapeHTML } from '../../chunks/astro/server_D23ZCGoD.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../../chunks/Layout_DAOamDnX.mjs';
-import { $ as $$ServiceHero } from '../../chunks/ServiceHero_DQMHWf5j.mjs';
-import { e as $$Physicians, b as $$ServicesGrid, f as $$Testimonials, $ as $$TrustBadges, a as $$InsuranceBar, d as $$WhatToExpect, c as $$WhenToCome } from '../../chunks/InsuranceBar_Dh7sav5e.mjs';
+import { $ as $$Layout } from '../../chunks/Layout_DK4fnEpZ.mjs';
+import { $ as $$ServiceHero } from '../../chunks/ServiceHero_Yjfmpz6W.mjs';
+import { e as $$Physicians, b as $$ServicesGrid, f as $$Testimonials, $ as $$TrustBadges, a as $$InsuranceBar, d as $$WhatToExpect, c as $$WhenToCome } from '../../chunks/InsuranceBar_CVqKRrns.mjs';
 import { a as $$CTA, $ as $$WhyChoose } from '../../chunks/CTA_CpAe_erJ.mjs';
 import { $ as $$FAQ } from '../../chunks/FAQ_B0siQolf.mjs';
 import { $ as $$PortableText } from '../../chunks/PortableText_Dn0Yjo3m.mjs';
 /* empty css                                     */
 import 'clsx';
-import { s as sanityClient } from '../../chunks/_sanity_client_JiifF4TX.mjs';
+import { c as client } from '../../chunks/sanity_Cpxq_s79.mjs';
 export { renderers } from '../../renderers.mjs';
 
 const $$Astro$9 = createAstro("https://erofwhiterock.com");
@@ -174,7 +174,7 @@ var __template = (cooked, raw) => __freeze(__defProp(cooked, "raw", { value: __f
 var _a, _b;
 const $$Astro = createAstro("https://erofwhiterock.com");
 async function getStaticPaths() {
-  const services = await sanityClient.fetch(`*[_type == "service" && defined(slug.current)] {
+  const services = await client.fetch(`*[_type == "service" && defined(slug.current)] {
     "params": { "slug": slug.current }
   }`);
   return services;
@@ -198,7 +198,7 @@ const $$slug = createComponent(async ($$result, $$props, $$slots) => {
     "physicians": physicians[]->
   }
 }`;
-  const service = await sanityClient.fetch(query, { slug });
+  const service = await client.fetch(query, { slug });
   if (!service) return Astro2.redirect("/404");
   const { title, metaDescription, medicalReviewer, hero, content } = service;
   const schema = {

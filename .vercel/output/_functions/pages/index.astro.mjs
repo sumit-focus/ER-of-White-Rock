@@ -1,11 +1,12 @@
-import '../chunks/page-ssr_CmsWzWBj.mjs';
+import '../chunks/page-ssr_BG6rDwkd.mjs';
 import { f as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_D23ZCGoD.mjs';
 import 'piccolore';
-import { a as getLandingPage, $ as $$Layout } from '../chunks/Layout_DAOamDnX.mjs';
-import { $ as $$Hero, a as $$ServingAreas, b as $$ComparisonTable } from '../chunks/ComparisonTable_Cxot2Rhk.mjs';
-import { $ as $$TrustBadges, a as $$InsuranceBar, b as $$ServicesGrid, c as $$WhenToCome, d as $$WhatToExpect, e as $$Physicians, f as $$Testimonials } from '../chunks/InsuranceBar_Dh7sav5e.mjs';
+import { $ as $$Layout } from '../chunks/Layout_DK4fnEpZ.mjs';
+import { $ as $$Hero, a as $$ServingAreas, b as $$ComparisonTable } from '../chunks/ComparisonTable_CjjUG8p3.mjs';
+import { $ as $$TrustBadges, a as $$InsuranceBar, b as $$ServicesGrid, c as $$WhenToCome, d as $$WhatToExpect, e as $$Physicians, f as $$Testimonials } from '../chunks/InsuranceBar_CVqKRrns.mjs';
 import { $ as $$WhyChoose, a as $$CTA } from '../chunks/CTA_CpAe_erJ.mjs';
 import { $ as $$FAQ } from '../chunks/FAQ_B0siQolf.mjs';
+import { a as getLandingPage } from '../chunks/sanity_Cpxq_s79.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Index = createComponent(async ($$result, $$props, $$slots) => {

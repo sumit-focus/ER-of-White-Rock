@@ -1,13 +1,13 @@
 ---
 import { urlFor } from "../../lib/sanity";
-import { sanityClient } from "sanity:client";
+import { client } from "../../lib/sanity";
 
 // Fetch all services
 let services = [];
 
 try {
     services =
-        await sanityClient.fetch(`*[_type == "service" && defined(slug.current) && !(_id in path("drafts.**"))] | order(title asc) {
+        await client.fetch(`*[_type == "service" && defined(slug.current) && !(_id in path("drafts.**"))] | order(title asc) {
     title,
     "slug": slug.current,
     icon

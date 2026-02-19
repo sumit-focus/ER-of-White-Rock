@@ -1,8 +1,8 @@
-import '../chunks/page-ssr_CmsWzWBj.mjs';
+import '../chunks/page-ssr_BG6rDwkd.mjs';
 import { e as createAstro, f as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute } from '../chunks/astro/server_D23ZCGoD.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_DAOamDnX.mjs';
-import { s as sanityClient } from '../chunks/_sanity_client_JiifF4TX.mjs';
+import { $ as $$Layout } from '../chunks/Layout_DK4fnEpZ.mjs';
+import { c as client } from '../chunks/sanity_Cpxq_s79.mjs';
 import { $ as $$PortableText } from '../chunks/PortableText_Dn0Yjo3m.mjs';
 export { renderers } from '../renderers.mjs';
 
@@ -10,7 +10,7 @@ const $$Astro = createAstro("https://erofwhiterock.com");
 const $$InsuranceBilling = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$InsuranceBilling;
-  const insurancePage = await sanityClient.fetch(
+  const insurancePage = await client.fetch(
     `*[_type == "insurancePage"][0]{
         ...,
         "feeMasterPdfUrl": feeMasterPdf.asset->url

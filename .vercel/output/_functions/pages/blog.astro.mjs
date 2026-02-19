@@ -1,12 +1,12 @@
-import '../chunks/page-ssr_CmsWzWBj.mjs';
+import '../chunks/page-ssr_BG6rDwkd.mjs';
 import { f as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute, l as Fragment } from '../chunks/astro/server_D23ZCGoD.mjs';
 import 'piccolore';
-import { $ as $$Layout, u as urlFor } from '../chunks/Layout_DAOamDnX.mjs';
-import { s as sanityClient } from '../chunks/_sanity_client_JiifF4TX.mjs';
+import { $ as $$Layout } from '../chunks/Layout_DK4fnEpZ.mjs';
+import { c as client, u as urlFor } from '../chunks/sanity_Cpxq_s79.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Index = createComponent(async ($$result, $$props, $$slots) => {
-  const posts = await sanityClient.fetch(`
+  const posts = await client.fetch(`
   *[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
     title,
     slug,

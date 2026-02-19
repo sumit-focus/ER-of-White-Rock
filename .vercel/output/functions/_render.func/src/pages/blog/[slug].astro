@@ -1,7 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { sanityClient } from "sanity:client";
-import { urlFor } from "../../lib/sanity";
+import { client, urlFor } from "../../lib/sanity";
 import { PortableText } from "astro-portabletext";
 import Breadcrumbs from "../../components/seo/Breadcrumbs.astro";
 import ShareButtons from "../../components/seo/ShareButtons.astro";
@@ -12,7 +11,7 @@ if (!slug) {
     return Astro.redirect("/404");
 }
 
-const post = await sanityClient.fetch(
+const post = await client.fetch(
     `*[_type == "post" && slug.current == $slug][0] {
     ...,
     "author": author->,

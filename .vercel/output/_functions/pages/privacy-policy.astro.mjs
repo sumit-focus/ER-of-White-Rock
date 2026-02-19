@@ -1,7 +1,7 @@
-import '../chunks/page-ssr_CmsWzWBj.mjs';
+import '../chunks/page-ssr_BG6rDwkd.mjs';
 import { f as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_D23ZCGoD.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_DAOamDnX.mjs';
+import { $ as $$Layout } from '../chunks/Layout_DK4fnEpZ.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$PrivacyPolicy = createComponent(($$result, $$props, $$slots) => {

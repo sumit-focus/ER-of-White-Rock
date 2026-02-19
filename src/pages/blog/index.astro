@@ -1,9 +1,8 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { sanityClient } from "sanity:client";
-import { urlFor } from "../../lib/sanity";
+import { client, urlFor } from "../../lib/sanity";
 
-const posts = await sanityClient.fetch(`
+const posts = await client.fetch(`
   *[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
     title,
     slug,

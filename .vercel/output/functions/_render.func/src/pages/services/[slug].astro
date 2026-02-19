@@ -24,11 +24,11 @@ import DiagnosticServices from "../../components/sections/DiagnosticServices.ast
 import TreatmentApproach from "../../components/sections/TreatmentApproach.astro";
 import RelatedServices from "../../components/sections/RelatedServices.astro";
 
-import { sanityClient } from "sanity:client";
+import { client } from "../../lib/sanity";
 
 export async function getStaticPaths() {
     const services =
-        await sanityClient.fetch(`*[_type == "service" && defined(slug.current)] {
+        await client.fetch(`*[_type == "service" && defined(slug.current)] {
     "params": { "slug": slug.current }
   }`);
     return services;
@@ -52,7 +52,7 @@ const query = `*[_type == "service" && slug.current == $slug][0] {
   }
 }`;
 
-const service = await sanityClient.fetch(query, { slug });
+const service = await client.fetch(query, { slug });
 
 if (!service) return Astro.redirect("/404");
 

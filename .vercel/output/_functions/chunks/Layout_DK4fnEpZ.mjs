@@ -1,81 +1,20 @@
 import { f as createComponent, m as maybeRenderHead, h as addAttribute, r as renderTemplate, e as createAstro, k as renderComponent, n as renderSlot, o as renderHead, u as unescapeHTML, l as Fragment, p as defineScriptVars } from './astro/server_D23ZCGoD.mjs';
 import 'piccolore';
 /* empty css                            */
-import { createClient } from '@sanity/client';
-import imageUrlBuilder from '@sanity/image-url';
+import { c as client, b as getSettings, u as urlFor } from './sanity_Cpxq_s79.mjs';
 import 'clsx';
-import { s as sanityClient } from './_sanity_client_JiifF4TX.mjs';
-
-const client = createClient({
-  projectId: "hdx7hgqq",
-  dataset: "production",
-  useCdn: false,
-  apiVersion: "2024-02-03"
-});
-const builder = imageUrlBuilder(client);
-function urlFor(source) {
-  return builder.image(source).auto("format").fit("max");
-}
-const LANDING_PAGE_PROJECTION = `{
-    ...,
-    content[] {
-        ...,
-        _type == 'servicesSection' => {
-            ...,
-            services[]->
-        },
-        _type == 'physiciansSection' => {
-            ...,
-            physicians[]->
-        },
-        _type == 'testimonialsSection' => {
-            ...,
-            testimonials[]->
-        },
-        _type == 'faqSection' => {
-            ...,
-            faqs[]->
-        }
-    }
-}`;
-const LANDING_PAGE_QUERY = `*[_type == "landingPage" && (slug.current == "home" || !defined(slug.current))][0] ${LANDING_PAGE_PROJECTION}`;
-const LANDING_PAGE_BY_SLUG_QUERY = `*[_type == "landingPage" && slug.current == $slug][0] ${LANDING_PAGE_PROJECTION}`;
-const SETTINGS_QUERY = `*[_type == "settings"][0] {
-    siteName,
-    tagline,
-    logo,
-    footerLogo,
-    contactPhone,
-    address,
-    email,
-    googleMapsUrl,
-    socialLinks,
-    headerLinks[] { label, url, isActive },
-    footerDescription,
-    footerDisclaimer,
-    googleAnalyticsId,
-    footerColumns[] { title, links[] { label, url, isActive } },
-    showStickyCTA,
-    stickyCallText,
-    stickyDirectionsText,
-    globalSchema
-}`;
-async function getLandingPage() {
-  return await client.fetch(LANDING_PAGE_QUERY);
-}
-async function getLandingPageBySlug(slug) {
-  return await client.fetch(LANDING_PAGE_BY_SLUG_QUERY, { slug });
-}
-async function getSettings() {
-  return await client.fetch(SETTINGS_QUERY);
-}
 
 const $$ServicesMenu = createComponent(async ($$result, $$props, $$slots) => {
-  const services = await sanityClient.fetch(`*[_type == "service" && defined(slug.current) && !(_id in path("drafts.**"))] | order(title asc) {
-  title,
-  "slug": slug.current,
-  icon
-}`);
+  let services = [];
+  try {
+    services = await client.fetch(`*[_type == "service" && defined(slug.current) && !(_id in path("drafts.**"))] | order(title asc) {
+    title,
+    "slug": slug.current,
+    icon
+  }`);
+  } catch (error) {
+    console.error("Error fetching services for menu:", error);
+  }
   return renderTemplate`${maybeRenderHead()}<div class="group relative"> <a href="/services" class="flex items-center gap-1 text-[15px] font-semibold text-text-main hover:text-primary transition-colors py-4">
 ER Services
 <span class="material-symbols-outlined text-sm">expand_more</span> </a> <!-- Mega Menu Dropdown --> <div class="absolute left-1/2 -translate-x-1/2 top-full w-[800px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-out transform translate-y-2 group-hover:translate-y-0 z-50 pt-4"> <div class="bg-white rounded-xl shadow-xl border border-gray-100 p-8 grid grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-8"> ${services.map((service) => renderTemplate`<a${addAttribute(`/services/${service.slug}`, "href")} class="flex items-center gap-3 group/item hover:bg-gray-50 p-2 rounded-lg -mx-2 transition-colors"> <span class="material-symbols-outlined text-primary group-hover/item:text-accent transition-colors"> ${service.icon || "medical_services"} </span> <span class="text-sm font-medium text-text-secondary group-hover/item:text-primary transition-colors"> ${service.title} </span> </a>`)} </div> <!-- Decorative arrow --> <div class="absolute top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-t border-l border-gray-100"></div> </div> </div>`;
@@ -97,7 +36,10 @@ const $$Layout = createComponent(async ($$result, $$props, $$slots) => {
     ogImage,
     ogType = "website"
   } = Astro2.props;
-  const settings = await getSettings().catch(() => null);
+  const settings = await getSettings().catch((err) => {
+    console.error("Error fetching site settings:", err);
+    return null;
+  });
   const defaultSettings = {
     siteName: "ER of White Rock",
     tagline: "Emergency Care",
@@ -232,4 +174,4 @@ location_on
 </span> ${stickyDirectionsText || "Get Directions"} </a> </div> </div>`);
 }, "C:/Users/sumit/OneDrive/Desktop/ER of White Rock/src/layouts/Layout.astro", void 0);
 
-export { $$Layout as $, getLandingPage as a, getLandingPageBySlug as g, urlFor as u };
+export { $$Layout as $ };

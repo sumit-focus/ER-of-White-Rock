@@ -1,11 +1,11 @@
-import '../chunks/page-ssr_CmsWzWBj.mjs';
+import '../chunks/page-ssr_BG6rDwkd.mjs';
 import { e as createAstro, f as createComponent, m as maybeRenderHead, h as addAttribute, r as renderTemplate, k as renderComponent, u as unescapeHTML } from '../chunks/astro/server_D23ZCGoD.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_DAOamDnX.mjs';
-import { $ as $$ServiceHero } from '../chunks/ServiceHero_DQMHWf5j.mjs';
+import { $ as $$Layout } from '../chunks/Layout_DK4fnEpZ.mjs';
+import { $ as $$ServiceHero } from '../chunks/ServiceHero_Yjfmpz6W.mjs';
 import 'clsx';
 import { a as $$CTA, $ as $$WhyChoose } from '../chunks/CTA_CpAe_erJ.mjs';
-import { s as sanityClient } from '../chunks/_sanity_client_JiifF4TX.mjs';
+import { c as client } from '../chunks/sanity_Cpxq_s79.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro = createAstro("https://erofwhiterock.com");
@@ -40,7 +40,7 @@ var __defProp = Object.defineProperty;
 var __template = (cooked, raw) => __freeze(__defProp(cooked, "raw", { value: __freeze(cooked.slice()) }));
 var _a;
 const $$Index = createComponent(async ($$result, $$props, $$slots) => {
-  const services = await sanityClient.fetch(`
+  const services = await client.fetch(`
   *[_type == "service" && !(_id in path("drafts.**"))]|order(order asc) {
     title,
     "slug": slug.current,

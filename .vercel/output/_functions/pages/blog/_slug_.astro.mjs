@@ -1,8 +1,8 @@
-import '../../chunks/page-ssr_CmsWzWBj.mjs';
+import '../../chunks/page-ssr_BG6rDwkd.mjs';
 import { e as createAstro, f as createComponent, r as renderTemplate, h as addAttribute, u as unescapeHTML, m as maybeRenderHead, k as renderComponent } from '../../chunks/astro/server_D23ZCGoD.mjs';
 import 'piccolore';
-import { u as urlFor, $ as $$Layout } from '../../chunks/Layout_DAOamDnX.mjs';
-import { s as sanityClient } from '../../chunks/_sanity_client_JiifF4TX.mjs';
+import { $ as $$Layout } from '../../chunks/Layout_DK4fnEpZ.mjs';
+import { c as client, u as urlFor } from '../../chunks/sanity_Cpxq_s79.mjs';
 import { $ as $$PortableText } from '../../chunks/PortableText_Dn0Yjo3m.mjs';
 import 'clsx';
 export { renderers } from '../../renderers.mjs';
@@ -46,7 +46,7 @@ const $$slug = createComponent(async ($$result, $$props, $$slots) => {
   if (!slug) {
     return Astro2.redirect("/404");
   }
-  const post = await sanityClient.fetch(
+  const post = await client.fetch(
     `*[_type == "post" && slug.current == $slug][0] {
     ...,
     "author": author->,

@@ -1,7 +1,7 @@
 import { e as createAstro, f as createComponent, m as maybeRenderHead, r as renderTemplate, h as addAttribute } from './astro/server_D23ZCGoD.mjs';
 import 'piccolore';
 import 'clsx';
-import { u as urlFor } from './Layout_DAOamDnX.mjs';
+import { u as urlFor } from './sanity_Cpxq_s79.mjs';
 
 const $$Astro$6 = createAstro("https://erofwhiterock.com");
 const $$TrustBadges = createComponent(($$result, $$props, $$slots) => {

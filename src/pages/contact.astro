@@ -1,12 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { sanityClient } from "sanity:client";
+import { client } from "../lib/sanity";
 import { PortableText } from "astro-portabletext";
 import FAQ from "../components/sections/FAQ.astro";
 import ContactForm from "../components/forms/ContactForm";
 
 // Fetch Contact Page Data
-const contactPage = await sanityClient.fetch(`*[_type == "contactPage"][0]`);
+const contactPage = await client.fetch(`*[_type == "contactPage"][0]`);
 
 if (!contactPage) {
     return Astro.redirect("/404");

@@ -1,7 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { sanityClient } from "sanity:client";
-import { urlFor } from "../../lib/sanity";
+import { client, urlFor } from "../../lib/sanity";
 import { PortableText } from "astro-portabletext";
 
 const { slug } = Astro.params;
@@ -10,7 +9,7 @@ if (!slug) {
     return Astro.redirect("/404");
 }
 
-const physician = await sanityClient.fetch(
+const physician = await client.fetch(
     `*[_type == "physician" && slug.current == $slug][0] {
     name,
     title,

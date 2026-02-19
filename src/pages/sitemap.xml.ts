@@ -1,4 +1,4 @@
-import { sanityClient } from "sanity:client";
+import { client } from "../lib/sanity";
 
 export async function GET() {
     const siteUrl = import.meta.env.SITE || "https://erwhiterock.com"; // Fallback URL
@@ -6,7 +6,7 @@ export async function GET() {
     // Fetch all dynamic pages
     let services = [];
     try {
-        services = await sanityClient.fetch(
+        services = await client.fetch(
             `*[_type == "service" && defined(slug.current)] { "slug": slug.current, _updatedAt }`
         );
     } catch (error) {
@@ -15,7 +15,7 @@ export async function GET() {
 
     let locations = [];
     try {
-        locations = await sanityClient.fetch(
+        locations = await client.fetch(
             `*[_type == "landingPage" && defined(slug.current) && slug.current != "home"] { "slug": slug.current, _updatedAt }`
         );
     } catch (error) {
